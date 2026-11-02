@@ -1,0 +1,50 @@
+/* src/pages/Cadastro/Cadastro.module.css */
+.cabecalho {
+display: flex;
+align-items: center;
+gap: var(--espaco-3);
+margin-bottom: var(--espaco-4);
+}
+
+/* Seta de voltar: botão quadrado com borda */
+.voltar {
+display: grid;
+place-items: center;
+width: 36px;
+height: 36px;
+flex-shrink: 0;
+border: 1px solid var(--borda);
+border-radius: var(--raio-campo);
+background: var(--superficie);
+font-size: 18px;
+line-height: 1;
+}
+
+.voltar:hover {
+background: var(--fundo);
+}
+
+.subtitulo {
+margin-top: var(--espaco-1);
+color: var(--texto-suave);
+}
+
+.formulario {
+display: flex;
+flex-direction: column;
+gap: var(--espaco-3);
+}
+
+.mostrarSenha {
+display: flex;
+align-items: center;
+gap: var(--espaco-2);
+color: var(--texto-suave);
+font-size: 13px;
+cursor: pointer;
+}
+
+.rodape {
+margin-top: var(--espaco-4);
+text-align: center;
+}
