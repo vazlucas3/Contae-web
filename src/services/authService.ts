@@ -1,20 +1,22 @@
-import { http } from './http';
+
+import { http } from './http'
 
 export interface LoginRequestDTO {
-  email: string;
-  senha: string;
+  email: string
+  senha: string
 }
 
 export interface LoginResponseDTO {
-  id: number;
-  nome: string;
-  email: string;
-  token: string;
+  token: string
+  tipo: string
 }
 
 export const authService = {
   async login(credentials: LoginRequestDTO): Promise<LoginResponseDTO> {
-    const response = await http.post<LoginResponseDTO>('/auth/login', credentials);
-    return response.data;
+    return http.post<LoginResponseDTO>(
+      '/api/auth/login',
+      credentials,
+      false
+    )
   },
-};
+}

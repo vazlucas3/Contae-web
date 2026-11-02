@@ -1,49 +1,46 @@
-import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import { authService, LoginRequestDTO, LoginResponseDTO } from '../services/authService';
 
-interface AuthContextData {
-  usuario: LoginResponseDTO | null;
-  token: string | null;
-  entrar(dados: LoginRequestDTO): Promise<void>;
-  sair(): void;
-}
+import { useEffect, useState, type ReactNode } from 'react'
+import { AuthContext } from './AuthContext'
+import type { LoginRequestDTO, LoginResponseDTO } from '@/services/authService'
+import { authService } from '@/services/authService'
+import { armazenamentoToken } from '@/services/armazenamentoToken'
 
-export const AuthContext = createContext<AuthContextData>({} as AuthContextData);
-
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [usuario, setUsuario] = useState<LoginResponseDTO | null>(null);
-  const [token, setToken] = useState<string | null>(null);
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [token, setToken] = useState<string | null>(null)
+  const [usuario, setUsuario] = useState<LoginResponseDTO | null>(null)
 
   useEffect(() => {
-    const tokenSalvo = localStorage.getItem('token_jwt');
-    const usuarioSalvo = localStorage.getItem('usuario_logado');
-
-    if (tokenSalvo && usuarioSalvo) {
-      setToken(tokenSalvo);
-      setUsuario(JSON.parse(usuarioSalvo));
-    }
-  }, []);
+    const tokenSalvo = armazenamentoToken.obter()
+    setToken(tokenSalvo)
+  }, [])
 
   const entrar = async (dados: LoginRequestDTO) => {
-    const resposta = await authService.login(dados);
-    
-    setToken(resposta.token);
-    setUsuario(resposta);
+    const resposta = await authService.login(dados)
 
-    localStorage.setItem('token_jwt', resposta.token);
-    localStorage.setItem('usuario_logado', JSON.stringify(resposta));
-  };
+    armazenamentoToken.salvar(resposta.token)
+
+    setToken(resposta.token)
+    setUsuario(null)
+  }
 
   const sair = () => {
-    setToken(null);
-    setUsuario(null);
-    localStorage.removeItem('token_jwt');
-    localStorage.removeItem('usuario_logado');
-  };
+    armazenamentoToken.remover()
+    localStorage.removeItem('usuario_logado')
+
+    setToken(null)
+    setUsuario(null)
+  }
 
   return (
-    <AuthContext.Provider value={{ usuario, token, entrar, sair }}>
+    <AuthContext.Provider
+      value={{
+        autenticado: !!token,
+        entrar,
+        sair,
+        usuario,
+      }}
+    >
       {children}
     </AuthContext.Provider>
-  );
-};
+  )
+}
