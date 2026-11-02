@@ -1,0 +1,59 @@
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+}
+
+.painelMarca {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--espaco-5);
+  background: var(--verde-escuro);
+  color: #fff;
+}
+
+.slogan {
+  max-width: 420px;
+  margin-bottom: var(--espaco-5);
+  font-family: var(--fonte-titulo);
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* Segunda linha do slogan do login em verde-menta */
+.slogan strong {
+  display: block;
+  color: var(--verde-menta);
+}
+
+.painelFormulario {
+  display: grid;
+  place-items: center;
+  padding: var(--espaco-5);
+  background: var(--superficie);
+}
+
+.formulario {
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Celular/tablet pequeno: painel verde vira um topo reduzido */
+@media (max-width: 767px) {
+  .layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  .painelMarca {
+    gap: var(--espaco-2);
+    padding: var(--espaco-3);
+  }
+
+  .slogan {
+    margin-bottom: 0;
+    font-size: 18px;
+  }
+}

@@ -1,0 +1,19 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.texto {
+  font-family: var(--fonte-titulo);
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.claro {
+  color: var(--texto);
+}
+
+.escuro {
+  color: #fff;
+}

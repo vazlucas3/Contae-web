@@ -1,0 +1,16 @@
+.aviso {
+  border-style: dashed;
+  text-align: center;
+  padding: var(--espaco-5) var(--espaco-4);
+}
+
+.titulo {
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.descricao {
+  margin-top: var(--espaco-2);
+  color: var(--texto-suave);
+}

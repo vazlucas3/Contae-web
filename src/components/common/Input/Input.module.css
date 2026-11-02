@@ -1,0 +1,41 @@
+.grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rotulo {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.campo {
+  height: var(--altura-campo);
+  padding: 0 12px;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-campo);
+}
+
+.campo::placeholder {
+  color: var(--texto-suave);
+}
+
+.campo:focus {
+  border-color: var(--verde-primario);
+  outline: none;
+}
+
+.campo:focus-visible {
+  outline: 2px solid var(--verde-primario);
+  outline-offset: 1px;
+}
+
+.comErro {
+  border-color: var(--vermelho);
+}
+
+.erro {
+  color: var(--vermelho);
+  font-size: 12px;
+}

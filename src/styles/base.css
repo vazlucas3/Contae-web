@@ -1,0 +1,83 @@
+/* ==================================================================
+ * ESTILOS GLOBAIS: reset simples + tipografia + foco visível.
+ * Estilos de componentes ficam em CSS Modules (*.module.css).
+ * ================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--texto);
+  font-family: var(--fonte-corpo);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  color: var(--texto);
+}
+
+h1 {
+  font-size: 24px;
+}
+
+h2 {
+  font-size: 18px;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--verde-primario);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Foco visível em todos os elementos interativos (acessibilidade) */
+:focus-visible {
+  outline: 2px solid var(--verde-primario);
+  outline-offset: 2px;
+}
+
+/* Classe utilitária: texto só para leitores de tela */
+.somente-leitor {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

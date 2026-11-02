@@ -1,0 +1,8 @@
+// Ponto único de importação dos serviços: import { contaService } from '@/services'
+export { http, ErroApi, EVENTO_NAO_AUTORIZADO } from './http'
+export { armazenamentoToken } from './armazenamentoToken'
+export { authService } from './authService'
+export { usuarioService } from './usuarioService'
+export { contaService } from './contaService'
+export { categoriaService } from './categoriaService'
+export { movimentacaoService } from './movimentacaoService'

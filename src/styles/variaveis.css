@@ -1,0 +1,49 @@
+/* ==================================================================
+ * TOKENS DE DESIGN
+ * Valores aproximados extraídos do documento de contexto do frontend.
+ * Use SEMPRE estas variáveis em vez de cores/medidas "soltas".
+ * ================================================================== */
+:root {
+  /* --- Cores da marca --- */
+  --verde-escuro: #052e2a;
+  --verde-escuro-hover: #0a4039;
+  --verde-primario: #0e8a5f;
+  --verde-primario-hover: #0b7350;
+  --verde-menta: #3ddc97;
+
+  /* --- Cores semânticas e de categoria --- */
+  --vermelho: #e5383b;
+  --azul: #2f80ed;
+  --laranja: #f2994a;
+  --roxo: #7b4ddb;
+  --rosa: #eb4da6;
+  --cinza: #8a9a97;
+
+  /* --- Neutros --- */
+  --fundo: #f4f8fa;
+  --superficie: #ffffff;
+  --borda: #e3eaec;
+  --texto: #0b2e2a;
+  --texto-suave: #6b7c79;
+
+  /* --- Tipografia --- */
+  --fonte-titulo: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  --fonte-corpo: 'Inter', system-ui, sans-serif;
+
+  /* --- Espaçamento (base 4/8/16/24/32) --- */
+  --espaco-1: 4px;
+  --espaco-2: 8px;
+  --espaco-3: 16px;
+  --espaco-4: 24px;
+  --espaco-5: 32px;
+
+  /* --- Formas --- */
+  --raio-card: 14px;
+  --raio-campo: 8px;
+  --sombra-suave: 0 2px 8px rgba(5, 46, 42, 0.06);
+
+  /* --- Layout --- */
+  --largura-sidebar: 220px;
+  --largura-sidebar-recolhida: 72px;
+  --altura-campo: 40px;
+}

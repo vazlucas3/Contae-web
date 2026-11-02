@@ -1,0 +1,40 @@
+.resumo {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-3);
+  padding: var(--espaco-3) var(--espaco-4);
+}
+
+.icone {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  /* fundo = a própria cor do ícone, bem clara */
+  background: color-mix(in srgb, currentColor 12%, transparent);
+}
+
+.rotulo {
+  color: var(--texto-suave);
+  font-size: 13px;
+}
+
+.valor {
+  font-family: var(--fonte-titulo);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.receita {
+  color: var(--verde-primario);
+}
+
+.despesa {
+  color: var(--vermelho);
+}
+
+.neutro {
+  color: var(--texto);
+}

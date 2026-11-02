@@ -1,0 +1,13 @@
+.texto {
+  margin-top: var(--espaco-2);
+  color: var(--texto-suave);
+}
+
+.lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--espaco-2) var(--espaco-3);
+  margin: var(--espaco-3) 0 0;
+  padding: 0;
+  list-style: none;
+}

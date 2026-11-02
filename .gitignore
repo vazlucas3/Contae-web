@@ -1,0 +1,15 @@
+node_modules
+dist
+.env
+*.local
+!.env.example
+!.env.development
+!.env.production
+.env.local
+.env.*.local
+*.log
+.DS_Store
+.idea
+.vscode/*
+!.vscode/extensions.json
+*.tsbuildinfo

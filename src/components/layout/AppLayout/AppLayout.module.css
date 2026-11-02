@@ -1,0 +1,49 @@
+.layout {
+  min-height: 100%;
+}
+
+/* Reserva o espaço da sidebar fixa */
+.coluna {
+  min-height: 100vh;
+  margin-left: var(--largura-sidebar);
+}
+
+.conteudo {
+  max-width: 1200px;
+  padding: var(--espaco-5);
+}
+
+.barraCelular {
+  display: none;
+}
+
+.botaoMenu {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-campo);
+  background: var(--superficie);
+}
+
+@media (max-width: 1023px) {
+  .coluna {
+    margin-left: var(--largura-sidebar-recolhida);
+  }
+}
+
+@media (max-width: 767px) {
+  .coluna {
+    margin-left: 0;
+  }
+
+  .barraCelular {
+    display: block;
+    padding: var(--espaco-3) var(--espaco-3) 0;
+  }
+
+  .conteudo {
+    padding: var(--espaco-3);
+  }
+}
