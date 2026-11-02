@@ -1,35 +1,49 @@
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
-import { armazenamentoToken, EVENTO_NAO_AUTORIZADO } from '@/services'
-import { AuthContext, type AuthContextValor } from './AuthContext'
+import React, { createContext, useState, useEffect, ReactNode } from 'react';
+import { authService, LoginRequestDTO, LoginResponseDTO } from '../services/authService';
 
-/* ------------------------------------------------------------------
- * AuthProvider
- * Mantém apenas o ESTADO DA SESSÃO (token). A tela de login e a validação
- * de formulário NÃO ficam aqui: pertencem à página de Login.
- * ------------------------------------------------------------------ */
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [token, setToken] = useState<string | null>(() => armazenamentoToken.obter())
-
-  const entrar = useCallback((novoToken: string) => {
-    armazenamentoToken.salvar(novoToken)
-    setToken(novoToken)
-  }, [])
-
-  const sair = useCallback(() => {
-    armazenamentoToken.remover()
-    setToken(null)
-  }, [])
-
-  // Se a API recusar o token (expirado/inválido), encerra a sessão.
-  useEffect(() => {
-    window.addEventListener(EVENTO_NAO_AUTORIZADO, sair)
-    return () => window.removeEventListener(EVENTO_NAO_AUTORIZADO, sair)
-  }, [sair])
-
-  const valor = useMemo<AuthContextValor>(
-    () => ({ autenticado: token !== null, entrar, sair }),
-    [token, entrar, sair],
-  )
-
-  return <AuthContext.Provider value={valor}>{children}</AuthContext.Provider>
+interface AuthContextData {
+  usuario: LoginResponseDTO | null;
+  token: string | null;
+  entrar(dados: LoginRequestDTO): Promise<void>;
+  sair(): void;
 }
+
+export const AuthContext = createContext<AuthContextData>({} as AuthContextData);
+
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [usuario, setUsuario] = useState<LoginResponseDTO | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const tokenSalvo = localStorage.getItem('token_jwt');
+    const usuarioSalvo = localStorage.getItem('usuario_logado');
+
+    if (tokenSalvo && usuarioSalvo) {
+      setToken(tokenSalvo);
+      setUsuario(JSON.parse(usuarioSalvo));
+    }
+  }, []);
+
+  const entrar = async (dados: LoginRequestDTO) => {
+    const resposta = await authService.login(dados);
+    
+    setToken(resposta.token);
+    setUsuario(resposta);
+
+    localStorage.setItem('token_jwt', resposta.token);
+    localStorage.setItem('usuario_logado', JSON.stringify(resposta));
+  };
+
+  const sair = () => {
+    setToken(null);
+    setUsuario(null);
+    localStorage.removeItem('token_jwt');
+    localStorage.removeItem('usuario_logado');
+  };
+
+  return (
+    <AuthContext.Provider value={{ usuario, token, entrar, sair }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};

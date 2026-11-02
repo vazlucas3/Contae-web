@@ -1,8 +1,3 @@
-/* ------------------------------------------------------------------
- * CAMINHOS DAS ROTAS
- * Fonte única dos endereços das telas. Use sempre estas constantes em
- * <Link>, navigate() e no menu — nunca escreva "/contas" direto no código.
- * ------------------------------------------------------------------ */
 export const CAMINHOS = {
   login: '/login',
   cadastro: '/cadastro',
