@@ -1,4 +1,4 @@
-// src/components/common/Aviso/Aviso.tsx
+
 import type { ReactNode } from 'react'
 import estilos from './Aviso.module.css'
 

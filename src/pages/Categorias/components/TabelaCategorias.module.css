@@ -1,0 +1,16 @@
+/* TabelaCategorias.module.css */
+.envoltorio {
+overflow-x: auto; background: var(--superficie);
+border: 1px solid var(--borda); border-radius: var(--raio-card);
+box-shadow: var(--sombra-suave);
+}
+.tabela { width: 100%; border-collapse: collapse; font-size: 13px; }
+.tabela th, .tabela td { padding: 12px var(--espaco-3); border-bottom: 1px solid var(--borda); text-align: left; }
+.tabela th { background: var(--fundo); font-weight: 600; }
+.tabela tbody tr:last-child td { border-bottom: 0; }
+.colunaAcoes { width: 100px; text-align: right !important; }
+.botaoExcluir {
+display: inline-grid; place-items: center; width: 32px; height: 32px;
+border: 0; border-radius: var(--raio-campo); background: transparent; color: var(--vermelho);
+}
+.botaoExcluir:hover { background: color-mix(in srgb, var(--vermelho) 10%, transparent); }

@@ -1,0 +1,10 @@
+.mensagem {
+color: var(--texto-suave);
+text-align: center;
+}
+
+/* Campo de busca acima da tabela */
+.busca {
+max-width: 360px;
+margin-bottom: var(--espaco-3);
+}
