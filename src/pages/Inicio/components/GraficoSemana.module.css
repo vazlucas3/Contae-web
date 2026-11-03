@@ -1,0 +1,72 @@
+/* src/pages/Inicio/components/GraficoSemana.module.css */
+.topo {
+display: flex;
+flex-wrap: wrap;
+align-items: center;
+justify-content: space-between;
+gap: var(--espaco-2);
+}
+
+.legenda {
+display: flex;
+gap: var(--espaco-3);
+margin: 0;
+padding: 0;
+color: var(--texto-suave);
+font-size: 13px;
+list-style: none;
+}
+
+.marca {
+display: inline-block;
+width: 10px;
+height: 10px;
+margin-right: 4px;
+border-radius: 3px;
+}
+
+.marcaReceita {
+background: var(--verde-primario);
+}
+
+.marcaDespesa {
+background: var(--vermelho);
+}
+
+/* Em telas estreitas o gráfico rola de lado em vez de encolher os rótulos */
+.rolagem {
+margin-top: var(--espaco-3);
+overflow-x: auto;
+}
+
+.grafico {
+display: block;
+width: 100%;
+min-width: 480px;
+max-width: 720px;
+height: auto;
+margin: 0 auto;
+}
+
+.linhaBase {
+stroke: var(--borda);
+stroke-width: 1;
+}
+
+.barraReceita {
+fill: var(--verde-primario);
+}
+
+.barraDespesa {
+fill: var(--vermelho);
+}
+
+.rotulo {
+fill: var(--texto-suave);
+font-size: 14px;
+}
+
+.vazio {
+margin-top: var(--espaco-3);
+color: var(--texto-suave);
+}

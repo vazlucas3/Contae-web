@@ -4,8 +4,11 @@
  * importa "env" daqui, o que facilita trocar valores e testar.
  * ------------------------------------------------------------------ */
 export const env = {
-  /** URL base da API. Em dev vale "/backend" (proxy do Vite). */
-  apiUrl: (import.meta.env.VITE_API_URL ?? '/backend').replace(/\/$/, ''),
+  /** URL base da API. Em dev sempre usa o proxy do Vite para evitar CORS. */
+  apiUrl: (import.meta.env.DEV ? '/backend' : (import.meta.env.VITE_API_URL ?? '')).replace(
+    /\/$/,
+    '',
+  ),
 
   /** Quando "true", as telas internas exigem token de login. */
   exigirLogin: import.meta.env.VITE_EXIGIR_LOGIN === 'true',
