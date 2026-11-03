@@ -1,35 +1,46 @@
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
-import { armazenamentoToken, EVENTO_NAO_AUTORIZADO } from '@/services'
-import { AuthContext, type AuthContextValor } from './AuthContext'
 
-/* ------------------------------------------------------------------
- * AuthProvider
- * Mantém apenas o ESTADO DA SESSÃO (token). A tela de login e a validação
- * de formulário NÃO ficam aqui: pertencem à página de Login.
- * ------------------------------------------------------------------ */
+import { useEffect, useState, type ReactNode } from 'react'
+import { AuthContext } from './AuthContext'
+import type { LoginRequestDTO, LoginResponseDTO } from '@/services/authService'
+import { authService } from '@/services/authService'
+import { armazenamentoToken } from '@/services/armazenamentoToken'
+
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [token, setToken] = useState<string | null>(() => armazenamentoToken.obter())
+  const [token, setToken] = useState<string | null>(null)
+  const [usuario, setUsuario] = useState<LoginResponseDTO | null>(null)
 
-  const entrar = useCallback((novoToken: string) => {
-    armazenamentoToken.salvar(novoToken)
-    setToken(novoToken)
-  }, [])
-
-  const sair = useCallback(() => {
-    armazenamentoToken.remover()
-    setToken(null)
-  }, [])
-
-  // Se a API recusar o token (expirado/inválido), encerra a sessão.
   useEffect(() => {
-    window.addEventListener(EVENTO_NAO_AUTORIZADO, sair)
-    return () => window.removeEventListener(EVENTO_NAO_AUTORIZADO, sair)
-  }, [sair])
+    const tokenSalvo = armazenamentoToken.obter()
+    setToken(tokenSalvo)
+  }, [])
 
-  const valor = useMemo<AuthContextValor>(
-    () => ({ autenticado: token !== null, entrar, sair }),
-    [token, entrar, sair],
+  const entrar = async (dados: LoginRequestDTO) => {
+    const resposta = await authService.login(dados)
+
+    armazenamentoToken.salvar(resposta.token)
+
+    setToken(resposta.token)
+    setUsuario(null)
+  }
+
+  const sair = () => {
+    armazenamentoToken.remover()
+    localStorage.removeItem('usuario_logado')
+
+    setToken(null)
+    setUsuario(null)
+  }
+
+  return (
+    <AuthContext.Provider
+      value={{
+        autenticado: !!token,
+        entrar,
+        sair,
+        usuario,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
   )
-
-  return <AuthContext.Provider value={valor}>{children}</AuthContext.Provider>
 }

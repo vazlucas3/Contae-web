@@ -1,0 +1,82 @@
+/* src/pages/Inicio/components/UltimasMovimentacoes.module.css */
+.topo {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: var(--espaco-2);
+}
+
+.lista {
+margin: var(--espaco-2) 0 0;
+padding: 0;
+list-style: none;
+}
+
+.item {
+display: flex;
+align-items: center;
+gap: var(--espaco-3);
+padding: 12px 0;
+border-bottom: 1px solid var(--borda);
+}
+
+.item:last-child {
+border-bottom: 0;
+}
+
+/* Bolinha com seta: ↑ receita, ↓ despesa */
+.bolinha {
+display: grid;
+place-items: center;
+width: 36px;
+height: 36px;
+flex-shrink: 0;
+border-radius: 50%;
+font-weight: 700;
+}
+
+.bolinhaReceita {
+background: color-mix(in srgb, var(--verde-primario) 12%, transparent);
+color: var(--verde-primario);
+}
+
+.bolinhaDespesa {
+background: color-mix(in srgb, var(--vermelho) 12%, transparent);
+color: var(--vermelho);
+}
+
+.texto {
+flex: 1;
+min-width: 0;
+}
+
+.descricao {
+overflow: hidden;
+font-weight: 600;
+text-overflow: ellipsis;
+white-space: nowrap;
+}
+
+.detalhe {
+color: var(--texto-suave);
+font-size: 13px;
+}
+
+.receita,
+.despesa {
+font-weight: 600;
+white-space: nowrap;
+}
+
+.receita {
+color: var(--verde-primario);
+}
+
+.despesa {
+color: var(--vermelho);
+}
+
+.vazio {
+margin-top: var(--espaco-3);
+color: var(--texto-suave);
+} 
