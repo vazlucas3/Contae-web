@@ -26,7 +26,7 @@ cp .env.example .env     # ajuste se necessário
 npm run dev              # http://localhost:5173
 ```
 
-Para usar a API, suba a `contae-api` (porta 8080 por padrão). A API **não tem CORS**, então em desenvolvimento o Vite faz proxy: o frontend chama `/backend/...` e o Vite repassa para `VITE_API_PROXY_TARGET`. O prefixo existe porque as rotas da API (`/contas`, `/categorias`) colidem com as das telas.
+Para usar a API, suba a `contae-api` (porta 8080 por padrão). A API **não tem CORS**, então em desenvolvimento o Vite sempre faz proxy: o frontend chama `/backend/...` e o Vite repassa para `VITE_API_PROXY_TARGET` ou, se essa variável não existir, para `VITE_API_URL`. Sem nenhuma das duas, usa `http://localhost:8080`. O prefixo existe porque as rotas da API (`/contas`, `/categorias`) colidem com as das telas.
 
 ## 5. Build de produção
 

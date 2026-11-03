@@ -1,0 +1,143 @@
+.login__form {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.login__form h2 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 24px;
+  color: var(--texto, #0B2E2A);
+  margin-bottom: 4px;
+}
+
+.login__sub {
+  color: var(--texto-suave, #6B7C79);
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.campo label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--texto, #0B2E2A);
+}
+
+.campo input {
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--borda, #E3EAEC);
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.campo input:focus {
+  border-color: var(--verde-primario, #0E8A5F);
+}
+
+.campo__senha {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.campo__senha input {
+  width: 100%;
+}
+
+.campo__olho {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--texto-suave, #6B7C79);
+  display: flex;
+  align-items: center;
+}
+
+.campo__erro {
+  color: var(--vermelho, #E5383B);
+  font-size: 12px;
+}
+
+.login__linha {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  margin: 4px 0;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: var(--texto, #0B2E2A);
+}
+
+.login__linha a {
+  color: var(--verde-primario, #0E8A5F);
+  text-decoration: none;
+}
+
+.login__linha a:hover {
+  text-decoration: underline;
+}
+
+.btn {
+  height: 40px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s;
+}
+
+.btn--primario {
+  background-color: var(--verde-primario, #0E8A5F);
+  color: white;
+}
+
+.btn--primario:hover:not(:disabled) {
+  background-color: var(--verde-primario-hover, #0B7350);
+}
+
+.btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.alerta {
+  background-color: rgba(229, 56, 59, 0.1);
+  color: var(--vermelho, #E5383B);
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  text-align: center;
+}
+
+.login__rodape {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--texto-suave, #6B7C79);
+}
+
+.login__rodape a {
+  color: var(--verde-primario, #0E8A5F);
+  text-decoration: none;
+  font-weight: 600;
+}
