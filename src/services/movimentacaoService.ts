@@ -8,7 +8,6 @@ import type {
 
 export const movimentacaoService = {
   async listar(filtros?: FiltrosMovimentacao): Promise<MovimentacaoDto[]> {
-    // Converte os filtros em query params, se houverem
     const params = new URLSearchParams()
     if (filtros) {
       if (filtros.dataInicio) params.append('dataInicio', filtros.dataInicio)
@@ -22,10 +21,6 @@ export const movimentacaoService = {
     const query = params.toString()
     const url = `/api/movimentacoes${query ? `?${query}` : ''}`
     return http.get<MovimentacaoDto[]>(url)
-  },
-
-  async buscarPorId(id: number): Promise<MovimentacaoDto> {
-    return http.get<MovimentacaoDto>(`/api/movimentacoes/${id}`)
   },
 
   async criar(dados: CriarMovimentacaoRequest): Promise<MovimentacaoDto> {

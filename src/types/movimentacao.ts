@@ -23,7 +23,7 @@ export interface CriarMovimentacaoRequest {
   recorrente?: boolean;
 }
 
-export interface AtualizarMovimentacaoRequest extends CriarMovimentacaoRequest {}
+export type AtualizarMovimentacaoRequest = CriarMovimentacaoRequest
 
 export interface FiltrosMovimentacao {
   dataInicio?: string;

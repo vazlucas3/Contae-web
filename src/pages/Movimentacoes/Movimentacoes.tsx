@@ -1,262 +1,292 @@
-import React, { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { movimentacaoService } from '@/services/movimentacaoService'
-import type { MovimentacaoDto, TipoMovimentacao } from '@/types/movimentacao'
+import { contaService } from '@/services/contaService'
+import { categoriaService } from '@/services/categoriaService'
+import type { MovimentacaoDto } from '@/types/movimentacao'
+import { FiltrosMovimentacoes } from './FiltrosMovimentacoes'
+import { TabelaMovimentacoes } from './TabelaMovimentacoes'
+import { ModalMovimentacao } from './ModalMovimentacao'
+import {
+  FILTROS_INICIAIS,
+  type DadosMovimentacao,
+  type Filtros,
+  type OpcaoCategoria,
+  type OpcaoConta,
+} from '@/types/tipos'
+import { Icone, cx, estilos, type NomeIcone } from './ui'
+import { formatarData, formatarMoeda, formatarSaldo, mensagemDeErro } from '@/types/formatadores'
+
+const ITENS_POR_PAGINA = 10
+
+// Espera o usuário parar de digitar antes de buscar no backend
+function useValorComAtraso<T>(valor: T, atrasoMs: number): T {
+  const [atrasado, setAtrasado] = useState(valor)
+  useEffect(() => {
+    const id = setTimeout(() => setAtrasado(valor), atrasoMs)
+    return () => clearTimeout(id)
+  }, [valor, atrasoMs])
+  return atrasado
+}
 
 export function Movimentacoes() {
   const [movimentacoes, setMovimentacoes] = useState<MovimentacaoDto[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
+  const [contas, setContas] = useState<OpcaoConta[]>([])
+  const [categorias, setCategorias] = useState<OpcaoCategoria[]>([])
+  const [carregando, setCarregando] = useState(true)
   const [erro, setErro] = useState<string | null>(null)
 
-  // Estados de Filtro
-  const [busca, setBusca] = useState('')
-  const [tipoFiltro, setTipoFiltro] = useState<string>('')
+  const [filtros, setFiltros] = useState<Filtros>(FILTROS_INICIAIS)
+  const busca = useValorComAtraso(filtros.busca, 350)
+  const [pagina, setPagina] = useState(1)
 
-  // Estado do Modal de Cadastro/Edição
   const [modalAberto, setModalAberto] = useState(false)
-  const [descricao, setDescricao] = useState('')
-  const [valor, setValor] = useState('')
-  const [tipo, setTipo] = useState<TipoMovimentacao>('DESPESA')
-  const [data, setData] = useState(new Date().toISOString().split('T')[0])
-  const [contaId, _setContaId] = useState<number>(1) // Ajustar conforme seleção real de contas
-  const [categoriaId, _setCategoriaId] = useState<number>(1) // Ajustar conforme categorias reais
+  const [emEdicao, setEmEdicao] = useState<MovimentacaoDto | null>(null)
+  const [aviso, setAviso] = useState<string | null>(null)
 
-  const carregarMovimentacoes = async () => {
-    try {
-      setLoading(true)
-      setErro(null)
-      const dados = await movimentacaoService.listar({
-        busca: busca || undefined,
-        tipo: tipoFiltro ? (tipoFiltro as TipoMovimentacao) : undefined
+  const ultimaRequisicao = useRef(0)
+
+  const datasInvalidas = Boolean(filtros.dataInicio && filtros.dataFim && filtros.dataInicio > filtros.dataFim)
+  const temFiltros = (Object.keys(FILTROS_INICIAIS) as Array<keyof Filtros>)
+    .some((chave) => filtros[chave] !== FILTROS_INICIAIS[chave])
+
+  /* ---------- Dados ---------- */
+
+  // Contas e categorias alimentam os filtros e o formulário
+  useEffect(() => {
+    Promise.all([contaService.listar(), categoriaService.listar()])
+      .then(([listaContas, listaCategorias]) => {
+        setContas(listaContas)
+        setCategorias(listaCategorias)
       })
-      setMovimentacoes(dados)
-    } catch (err: any) {
-      setErro(err?.message || 'Erro ao carregar movimentações.')
+      .catch((err) => setErro(mensagemDeErro(err, 'Não foi possível carregar contas e categorias.')))
+  }, [])
+
+  // Filtros vão para o backend; respostas antigas são ignoradas se outra busca começou depois
+  const carregarMovimentacoes = useCallback(async () => {
+    if (datasInvalidas) return
+    const id = ++ultimaRequisicao.current
+    setCarregando(true)
+    setErro(null)
+    try {
+      const dados = await movimentacaoService.listar({
+        busca: busca.trim() || undefined,
+        tipo: filtros.tipo || undefined,
+        contaId: filtros.contaId ? Number(filtros.contaId) : undefined,
+        categoriaId: filtros.categoriaId ? Number(filtros.categoriaId) : undefined,
+        dataInicio: filtros.dataInicio || undefined,
+        dataFim: filtros.dataFim || undefined,
+      })
+      if (id === ultimaRequisicao.current) setMovimentacoes(dados)
+    } catch (err) {
+      if (id === ultimaRequisicao.current) {
+        setErro(mensagemDeErro(err, 'Não foi possível carregar as movimentações.'))
+      }
     } finally {
-      setLoading(false)
+      if (id === ultimaRequisicao.current) setCarregando(false)
     }
-  }
+  }, [busca, filtros.tipo, filtros.contaId, filtros.categoriaId, filtros.dataInicio, filtros.dataFim, datasInvalidas])
 
   useEffect(() => {
+    let ativo = true
+    Promise.resolve().then(() => {
+      if (ativo) void carregarMovimentacoes()
+    })
+    return () => { ativo = false }
+  }, [carregarMovimentacoes])
+
+  // Aviso some sozinho
+  useEffect(() => {
+    if (!aviso) return
+    const id = setTimeout(() => setAviso(null), 3500)
+    return () => clearTimeout(id)
+  }, [aviso])
+
+  /* ---------- Derivados ---------- */
+
+  const ordenadas = useMemo(
+    () => [...movimentacoes].sort((a, b) => b.data.localeCompare(a.data) || b.id - a.id),
+    [movimentacoes],
+  )
+
+  const totais = useMemo(() => {
+    let receitas = 0
+    let despesas = 0
+    for (const m of movimentacoes) {
+      if (m.tipo === 'RECEITA') receitas += m.valor
+      else despesas += m.valor
+    }
+    return { receitas, despesas, saldo: receitas - despesas }
+  }, [movimentacoes])
+
+  const totalPaginas = Math.max(1, Math.ceil(ordenadas.length / ITENS_POR_PAGINA))
+  const paginaAtual = Math.min(pagina, totalPaginas)
+  const inicio = (paginaAtual - 1) * ITENS_POR_PAGINA
+  const itensDaPagina = ordenadas.slice(inicio, inicio + ITENS_POR_PAGINA)
+
+  /* ---------- Ações ---------- */
+
+  const mudarFiltros = (parcial: Partial<Filtros>) => {
+    setFiltros((atual) => ({ ...atual, ...parcial }))
+    setPagina(1)
+  }
+
+  const limparFiltros = () => {
+    setFiltros(FILTROS_INICIAIS)
+    setPagina(1)
+    document.getElementById('filtro-busca')?.focus()
+  }
+
+  const abrirNova = () => {
+    setEmEdicao(null)
+    setModalAberto(true)
+  }
+
+  const abrirEdicao = (item: MovimentacaoDto) => {
+    setEmEdicao(item)
+    setModalAberto(true)
+  }
+
+  const fecharModal = useCallback(() => {
+    setModalAberto(false)
+    setEmEdicao(null)
+  }, [])
+
+  // Erros aqui sobem para o modal, que mostra a mensagem dentro dele
+  const salvar = async (dados: DadosMovimentacao) => {
+    if (emEdicao) {
+      await movimentacaoService.atualizar(emEdicao.id, dados)
+      setAviso('Movimentação atualizada.')
+    } else {
+      await movimentacaoService.criar(dados)
+      setAviso('Movimentação adicionada.')
+      setPagina(1)
+    }
+    fecharModal()
     carregarMovimentacoes()
-  }, [tipoFiltro])
+  }
 
-  const handleSubmitCriacao = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const excluir = async (item: MovimentacaoDto) => {
+    const confirmou = window.confirm(
+      `Excluir "${item.descricao}" de ${formatarData(item.data)}?\nEssa ação não pode ser desfeita.`,
+    )
+    if (!confirmou) return
     try {
-      await movimentacaoService.criar({
-        descricao,
-        valor: Number(valor),
-        tipo,
-        data,
-        contaId,
-        categoriaId
-      })
-      setModalAberto(false)
-      limparFormulario()
+      await movimentacaoService.excluir(item.id)
+      setAviso('Movimentação excluída.')
       carregarMovimentacoes()
-    } catch (err: any) {
-      alert(err?.message || 'Erro ao salvar movimentação.')
+    } catch (err) {
+      setErro(mensagemDeErro(err, 'Não foi possível excluir a movimentação.'))
     }
   }
 
-  const handleExcluir = async (id: number) => {
-    if (window.confirm('Deseja realmente excluir esta movimentação?')) {
-      try {
-        await movimentacaoService.excluir(id)
-        carregarMovimentacoes()
-      } catch (err: any) {
-        alert(err?.message || 'Erro ao excluir movimentação.')
-      }
-    }
-  }
-
-  const limparFormulario = () => {
-    setDescricao('')
-    setValor('')
-    setTipo('DESPESA')
-    setData(new Date().toISOString().split('T')[0])
-  }
-
-  const formatarMoeda = (val: number, tipoMov: TipoMovimentacao) => {
-    const formatado = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val)
-    return tipoMov === 'DESPESA' ? `- ${formatado}` : formatado
-  }
+  /* ---------- Tela ---------- */
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      {/* Cabeçalho da Página */}
-      <div className="flex justify-between items-center mb-6">
+    <div className="mx-auto flex max-w-[1200px] flex-col gap-5 p-4 text-[#0B2E2A] sm:p-8">
+      {/* Cabeçalho: título à esquerda, ação principal à direita */}
+      <header className="mb-1 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-[#0B2E2A]">Movimentações</h1>
-          <p className="text-sm text-[#6B7C79]">Gerencie suas receitas e despesas de forma simples.</p>
+          <h1 className="text-2xl font-bold leading-tight tracking-tight">Movimentações</h1>
+          <p className="mt-1 text-sm text-[#6B7C79]">Gerencie suas receitas e despesas de forma simples.</p>
         </div>
-        <button
-          onClick={() => { limparFormulario(); setModalAberto(true); }}
-          className="bg-[#0E8A5F] hover:bg-[#0B7350] text-white font-semibold px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
-        >
-          + Nova movimentação
+        <button type="button" onClick={abrirNova} className={cx(estilos.botaoPrimario, 'max-[480px]:w-full')}>
+          <Icone nome="mais" className="size-[18px] stroke-[2.25]" />
+          Nova movimentação
         </button>
-      </div>
+      </header>
 
-      {/* Filtros em Linha */}
-      <div className="bg-white p-4 rounded-xl shadow-sm border border-[#E3EAEC] mb-6 flex flex-wrap gap-4 items-center justify-between">
-        <div className="flex flex-wrap gap-3 items-center">
-          <input
-            type="text"
-            placeholder="Buscar descrição..."
-            value={busca}
-            onChange={(e) => setBusca(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && carregarMovimentacoes()}
-            className="border border-[#E3EAEC] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#0E8A5F]"
-          />
-          <select
-            value={tipoFiltro}
-            onChange={(e) => setTipoFiltro(e.target.value)}
-            className="border border-[#E3EAEC] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#0E8A5F]"
-          >
-            <option value="">Todos os tipos</option>
-            <option value="RECEITA">Receitas</option>
-            <option value="DESPESA">Despesas</option>
-          </select>
-          <button
-            onClick={carregarMovimentacoes}
-            className="bg-gray-100 hover:bg-gray-200 text-[#0B2E2A] text-sm px-4 py-2 rounded-lg font-medium transition-colors"
-          >
-            Filtrar
+      {erro && (
+        <div role="alert" className="flex flex-wrap items-center gap-3 rounded-[14px] border border-[#F6C9CA] bg-[#FDECEC] px-4 py-3 text-sm font-medium text-[#C42B2E]">
+          <Icone nome="alerta" className="size-[18px] shrink-0" />
+          <span className="flex-1">{erro}</span>
+          <button type="button" onClick={carregarMovimentacoes} className="font-semibold underline-offset-2 hover:underline">
+            Tentar novamente
           </button>
         </div>
-      </div>
-
-      {/* Tratamento de Erro / Loading */}
-      {erro && <div className="bg-red-50 text-[#E5383B] p-4 rounded-lg mb-4 text-sm">{erro}</div>}
-
-      {/* Tabela de Movimentações */}
-      <div className="bg-white rounded-xl shadow-sm border border-[#E3EAEC] overflow-hidden">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="bg-[#F4F8FA] text-[#6B7C79] text-xs uppercase font-semibold border-b border-[#E3EAEC]">
-              <th className="p-4">Data</th>
-              <th className="p-4">Descrição</th>
-              <th className="p-4">Categoria</th>
-              <th className="p-4">Conta</th>
-              <th className="p-4">Tipo</th>
-              <th className="p-4 text-right">Valor</th>
-              <th className="p-4 text-center">Ações</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-[#E3EAEC] text-sm text-[#0B2E2A]">
-            {loading ? (
-              <tr>
-                <td colSpan={7} className="p-6 text-center text-[#6B7C79]">Carregando movimentações...</td>
-              </tr>
-            ) : movimentacoes.length === 0 ? (
-              <tr>
-                <td colSpan={7} className="p-6 text-center text-[#6B7C79]">Nenhuma movimentação encontrada.</td>
-              </tr>
-            ) : (
-              movimentacoes.map((item) => (
-                <tr key={item.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="p-4">{new Date(item.data).toLocaleDateString('pt-BR')}</td>
-                  <td className="p-4 font-medium">{item.descricao}</td>
-                  <td className="p-4">{item.categoriaNome || 'Geral'}</td>
-                  <td className="p-4">{item.contaNome || 'Principal'}</td>
-                  <td className="p-4">
-                    <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                      item.tipo === 'RECEITA' ? 'bg-green-100 text-[#0E8A5F]' : 'bg-red-100 text-[#E5383B]'
-                    }`}>
-                      {item.tipo}
-                    </span>
-                  </td>
-                  <td className={`p-4 text-right font-semibold ${item.tipo === 'RECEITA' ? 'text-[#0E8A5F]' : 'text-[#E5383B]'}`}>
-                    {formatarMoeda(item.valor, item.tipo)}
-                  </td>
-                  <td className="p-4 text-center">
-                    <button
-                      onClick={() => handleExcluir(item.id)}
-                      className="text-[#E5383B] hover:opacity-75 p-1 transition-opacity"
-                      title="Excluir"
-                    >
-                      🗑️
-                    </button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Modal de Cadastro */}
-      {modalAberto && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl">
-            <h2 className="text-xl font-bold text-[#0B2E2A] mb-4">Nova Movimentação</h2>
-            <form onSubmit={handleSubmitCriacao} className="space-y-4">
-              <div>
-                <label className="block text-xs font-medium text-[#6B7C79] mb-1">Descrição</label>
-                <input
-                  type="text"
-                  required
-                  value={descricao}
-                  onChange={(e) => setDescricao(e.target.value)}
-                  placeholder="Ex: Supermercado"
-                  className="w-full border border-[#E3EAEC] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#0E8A5F]"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-medium text-[#6B7C79] mb-1">Valor (R$)</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    required
-                    value={valor}
-                    onChange={(e) => setValor(e.target.value)}
-                    placeholder="0,00"
-                    className="w-full border border-[#E3EAEC] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#0E8A5F]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-[#6B7C79] mb-1">Tipo</label>
-                  <select
-                    value={tipo}
-                    onChange={(e) => setTipo(e.target.value as TipoMovimentacao)}
-                    className="w-full border border-[#E3EAEC] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#0E8A5F]"
-                  >
-                    <option value="DESPESA">Despesa</option>
-                    <option value="RECEITA">Receita</option>
-                  </select>
-                </div>
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-[#6B7C79] mb-1">Data</label>
-                <input
-                  type="date"
-                  required
-                  value={data}
-                  onChange={(e) => setData(e.target.value)}
-                  className="w-full border border-[#E3EAEC] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#0E8A5F]"
-                />
-              </div>
-              <div className="flex justify-end gap-3 mt-6">
-                <button
-                  type="button"
-                  onClick={() => setModalAberto(false)}
-                  className="px-4 py-2 border border-[#E3EAEC] rounded-lg text-sm text-[#0B2E2A] hover:bg-gray-50"
-                >
-                  Cancelar
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-[#0E8A5F] hover:bg-[#0B7350] text-white rounded-lg text-sm font-semibold"
-                >
-                  Salvar
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
       )}
+
+      <FiltrosMovimentacoes
+        filtros={filtros}
+        contas={contas}
+        categorias={categorias}
+        temFiltros={temFiltros}
+        datasInvalidas={datasInvalidas}
+        onChange={mudarFiltros}
+        onLimpar={limparFiltros}
+      />
+
+      {/* Totais do resultado filtrado */}
+      <section aria-label="Totais das movimentações filtradas" className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <Total icone="sobe" rotulo="Receitas" valor={formatarMoeda(totais.receitas)}
+          classeIcone="bg-[#E7F5EF] text-[#0E8A5F]" classeValor="text-[#0E8A5F]" />
+        <Total icone="desce" rotulo="Despesas" valor={formatarSaldo(-totais.despesas)}
+          classeIcone="bg-[#FDECEC] text-[#E5383B]" classeValor="text-[#E5383B]" />
+        <Total icone="carteira" rotulo="Saldo" valor={formatarSaldo(totais.saldo)}
+          classeIcone="bg-[#E8F1FD] text-[#2F80ED]"
+          classeValor={totais.saldo > 0 ? 'text-[#0E8A5F]' : totais.saldo < 0 ? 'text-[#E5383B]' : 'text-[#0B2E2A]'} />
+      </section>
+
+      <TabelaMovimentacoes
+        itens={itensDaPagina}
+        totalItens={ordenadas.length}
+        carregando={carregando}
+        pagina={paginaAtual}
+        totalPaginas={totalPaginas}
+        inicio={inicio}
+        categorias={categorias}
+        temFiltros={temFiltros}
+        onPagina={setPagina}
+        onEditar={abrirEdicao}
+        onExcluir={excluir}
+        onLimparFiltros={limparFiltros}
+        onNova={abrirNova}
+      />
+
+      <ModalMovimentacao
+        aberto={modalAberto}
+        movimentacao={emEdicao}
+        contas={contas}
+        categorias={categorias}
+        onFechar={fecharModal}
+        onSalvar={salvar}
+      />
+
+      {/* Aviso de confirmação */}
+      <div
+        role="status"
+        aria-live="polite"
+        className={cx(
+          'pointer-events-none fixed bottom-6 left-1/2 z-[60] flex -translate-x-1/2 items-center gap-2.5 rounded-[10px]',
+          'bg-[#052E2A] px-4 py-3 text-sm font-medium text-white shadow-[0_24px_48px_rgba(5,46,42,0.18)]',
+          'transition duration-200 motion-reduce:transition-none',
+          aviso ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0',
+        )}
+      >
+        <Icone nome="check" className="size-[18px] text-[#3DDC97]" />
+        {aviso}
+      </div>
+    </div>
+  )
+}
+
+interface TotalProps {
+  icone: NomeIcone
+  rotulo: string
+  valor: string
+  classeIcone: string
+  classeValor: string
+}
+
+function Total({ icone, rotulo, valor, classeIcone, classeValor }: TotalProps) {
+  return (
+    <div className="flex items-center gap-3.5 rounded-[14px] border border-[#E3EAEC] bg-white px-5 py-4 shadow-[0_2px_8px_rgba(5,46,42,0.06)]">
+      <span className={cx('grid size-10 shrink-0 place-items-center rounded-[10px]', classeIcone)}>
+        <Icone nome={icone} />
+      </span>
+      <div>
+        <p className="text-[13px] text-[#6B7C79]">{rotulo}</p>
+        <p className={cx('text-xl font-bold tabular-nums', classeValor)}>{valor}</p>
+      </div>
     </div>
   )
 }

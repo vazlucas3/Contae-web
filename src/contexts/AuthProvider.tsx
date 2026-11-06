@@ -1,11 +1,18 @@
 
+<<<<<<< HEAD
 import { useEffect, useState, type ReactNode } from 'react'
 import { AuthContext } from './AuthContext'
 import type { LoginRequestDTO, LoginResponseDTO } from '@/services/authService'
+=======
+import { useState, type ReactNode } from 'react'
+import { AuthContext } from './AuthContext'
+import type { LoginRequest, LoginResponse } from '@/types'
+>>>>>>> b8ba0e0 (feat: salvando alterações locais antes do rebase)
 import { authService } from '@/services/authService'
 import { armazenamentoToken } from '@/services/armazenamentoToken'
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+<<<<<<< HEAD
   const [token, setToken] = useState<string | null>(null)
   const [usuario, setUsuario] = useState<LoginResponseDTO | null>(null)
 
@@ -15,6 +22,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const entrar = async (dados: LoginRequestDTO) => {
+=======
+  const [token, setToken] = useState<string | null>(() => armazenamentoToken.obter())
+  const [usuario, setUsuario] = useState<LoginResponse | null>(null)
+
+  const entrar = async (dados: LoginRequest) => {
+>>>>>>> b8ba0e0 (feat: salvando alterações locais antes do rebase)
     const resposta = await authService.login(dados)
 
     armazenamentoToken.salvar(resposta.token)
