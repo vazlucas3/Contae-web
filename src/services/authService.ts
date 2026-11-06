@@ -1,7 +1,22 @@
-import type { LoginRequest, LoginResponse } from '@/types'
+
 import { http } from './http'
 
-/* Autenticação — endpoint público da API: POST /api/auth/login */
+export interface LoginRequestDTO {
+  email: string
+  senha: string
+}
+
+export interface LoginResponseDTO {
+  token: string
+  tipo: string
+}
+
 export const authService = {
-  login: (dados: LoginRequest) => http.post<LoginResponse>('/api/auth/login', dados, false),
+  async login(credentials: LoginRequestDTO): Promise<LoginResponseDTO> {
+    return http.post<LoginResponseDTO>(
+      '/api/auth/login',
+      credentials,
+      false
+    )
+  },
 }

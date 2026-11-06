@@ -1,0 +1,23 @@
+.aviso {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: var(--espaco-3);
+flex-wrap: wrap;
+margin-bottom: var(--espaco-3);
+padding: var(--espaco-3);
+border: 1px solid;
+border-radius: var(--raio-campo);
+}
+
+.sucesso {
+border-color: var(--verde-primario);
+background: color-mix(in srgb, var(--verde-primario) 8%, var(--superficie));
+color: var(--verde-primario-hover);
+}
+
+.erro {
+border-color: var(--vermelho);
+background: color-mix(in srgb, var(--vermelho) 8%, var(--superficie));
+color: var(--vermelho);
+}

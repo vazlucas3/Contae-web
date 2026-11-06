@@ -1,13 +1,19 @@
-.texto {
-  margin-top: var(--espaco-2);
-  color: var(--texto-suave);
+/* src/pages/Inicio/Inicio.module.css */
+
+/* Os blocos da página ficam empilhados com o mesmo espaçamento */
+.pagina {
+  display: grid;
+  gap: var(--espaco-4);
 }
 
-.lista {
+/* Cards de receitas e despesas lado a lado; quebram de linha em telas estreitas */
+.resumo {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: var(--espaco-2) var(--espaco-3);
-  margin: var(--espaco-3) 0 0;
-  padding: 0;
-  list-style: none;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--espaco-3);
+}
+
+.mensagem {
+  color: var(--texto-suave);
+  text-align: center;
 }

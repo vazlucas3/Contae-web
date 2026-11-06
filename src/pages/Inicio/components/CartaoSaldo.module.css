@@ -1,0 +1,86 @@
+/* src/pages/Inicio/components/CartaoSaldo.module.css */
+
+/* Cartão de destaque: degradê verde escuro, com um brilho suave no canto */
+.cartao {
+position: relative;
+display: flex;
+flex-wrap: wrap;
+align-items: flex-end;
+justify-content: space-between;
+gap: var(--espaco-4);
+padding: var(--espaco-5);
+overflow: hidden;
+border-radius: 20px;
+background: linear-gradient(135deg, var(--verde-escuro) 0%, var(--verde-escuro-hover) 100%);
+color: #fff;
+box-shadow: 0 10px 30px rgba(5, 46, 42, 0.25);
+}
+
+.cartao::after {
+content: '';
+position: absolute;
+top: -80px;
+right: -60px;
+width: 260px;
+height: 260px;
+border-radius: 50%;
+background: radial-gradient(circle, rgba(61, 220, 151, 0.35) 0%, transparent 70%);
+pointer-events: none;
+}
+
+.cartao > div {
+position: relative;
+z-index: 1;
+}
+
+.rotulo {
+font-size: 13px;
+opacity: 0.75;
+}
+
+.valor {
+margin-top: var(--espaco-1);
+font-family: var(--fonte-titulo);
+font-size: 38px;
+font-weight: 800;
+line-height: 1.1;
+}
+
+.detalhe {
+margin-top: var(--espaco-1);
+font-size: 12px;
+opacity: 0.6;
+}
+
+.mes {
+text-align: right;
+}
+
+.resultado {
+margin-top: var(--espaco-1);
+font-family: var(--fonte-titulo);
+font-size: 22px;
+font-weight: 700;
+}
+
+.positivo {
+color: var(--verde-menta);
+}
+
+.negativo {
+color: #ff8a8c;
+}
+
+@media (max-width: 560px) {
+.cartao {
+padding: var(--espaco-4);
+}
+
+.valor {
+font-size: 30px;
+}
+
+.mes {
+text-align: left;
+}
+}

@@ -1,0 +1,48 @@
+.cabecalho {
+display: flex;
+align-items: center;
+gap: var(--espaco-3);
+margin-bottom: var(--espaco-4);
+}
+
+/* Seta de voltar: botão quadrado com borda */
+.voltar {
+display: grid;
+place-items: center;
+width: 36px;
+height: 36px;
+border: 1px solid var(--borda);
+border-radius: var(--raio-campo);
+background: var(--superficie);
+font-size: 18px;
+line-height: 1;
+}
+
+.voltar:hover {
+background: var(--fundo);
+}
+
+.cartao {
+max-width: 520px;
+}
+
+.formulario {
+display: flex;
+flex-direction: column;
+gap: var(--espaco-4);
+}
+
+.erroApi {
+padding: var(--espaco-2) var(--espaco-3);
+border: 1px solid var(--vermelho);
+border-radius: var(--raio-campo);
+background: color-mix(in srgb, var(--vermelho) 8%, var(--superficie));
+color: var(--vermelho);
+}
+
+/* Cancelar e Salvar lado a lado, alinhados à direita */
+.botoes {
+display: flex;
+justify-content: flex-end;
+gap: var(--espaco-2);
+}

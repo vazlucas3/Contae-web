@@ -1,148 +1,109 @@
-# Contae Web
+# ContaÊ — Front-end
 
-Frontend do **Contae**, app de finanças pessoais. Este repositório contém a **estrutura inicial**: layout, rotas, camada de serviços, tipos e componentes compartilhados. As telas estão como esqueletos para que cada desenvolvedor implemente a sua sem reorganizar o projeto.
+Front-end do ContaÊ, aplicação de gestão financeira pessoal. Esta versão preserva a estrutura original do projeto e a tela de **Movimentações**, integrada à camada de serviços e às rotas existentes.
 
-## 1. Objetivo
+## Tecnologias
 
-Fornecer uma base padronizada para o time trabalhar em paralelo: uma pasta por tela, rotas centralizadas, um único lugar para falar com a API (`services/`) e componentes reutilizáveis (`components/common/`).
+- React e TypeScript
+- Vite
+- Tailwind CSS 3
+- CSS Modules e tokens de design em `src/styles/variaveis.css`
+- React Router
+- Axios
+- ESLint
 
-## 2. Tecnologias
+## Pré-requisitos
 
-React 19 · Vite · TypeScript · React Router · CSS Modules · ESLint · npm.
-Não há bibliotecas de HTTP, UI ou ícones: o cliente HTTP usa `fetch` e os ícones são SVG próprios (`Icone`). Adicione dependências só com necessidade e combinando com o time.
+- Node.js 20 ou superior (recomendado Node.js 22)
+- npm
+- Back-end ContaÊ disponível para testar operações reais da API
 
-## 3. Instalação
+## Instalação
 
-Requer Node.js 20+ (testado com 22).
+Na pasta raiz do front-end, execute:
 
 ```bash
 npm install
-cp .env.example .env     # ajuste se necessário
 ```
 
-## 4. Executar localmente
+Crie seu arquivo de ambiente local a partir do modelo:
 
 ```bash
-npm run dev              # http://localhost:5173
+cp .env.example .env.local
 ```
 
-Para usar a API, suba a `contae-api` (porta 8080 por padrão). A API **não tem CORS**, então em desenvolvimento o Vite faz proxy: o frontend chama `/backend/...` e o Vite repassa para `VITE_API_PROXY_TARGET`. O prefixo existe porque as rotas da API (`/contas`, `/categorias`) colidem com as das telas.
+<<<<<<< HEAD
+Para usar a API, suba a `contae-api` (porta 8080 por padrão). A API **não tem CORS**, então em desenvolvimento o Vite sempre faz proxy: o frontend chama `/backend/...` e o Vite repassa para `VITE_API_PROXY_TARGET` ou, se essa variável não existir, para `VITE_API_URL`. Sem nenhuma das duas, usa `http://localhost:8080`. O prefixo existe porque as rotas da API (`/contas`, `/categorias`) colidem com as das telas.
+=======
+No Windows PowerShell, use:
+>>>>>>> b8ba0e0 (feat: salvando alterações locais antes do rebase)
 
-## 5. Build de produção
+```powershell
+Copy-Item .env.example .env.local
+```
+
+Ajuste as variáveis conforme o ambiente. Não publique arquivos `.env*` com configurações locais ou credenciais.
+
+## Configuração da API
+
+O modelo `.env.example` utiliza:
+
+- `VITE_API_URL=/backend`: endereço base utilizado pelo front-end em desenvolvimento.
+- `VITE_API_PROXY_TARGET=http://localhost:8080`: endereço local do back-end para o proxy do Vite.
+- `VITE_EXIGIR_LOGIN=false`: permite acessar as telas internas sem exigir token enquanto o fluxo de autenticação não estiver habilitado. Altere para `true` quando o back-end e o fluxo de login estiverem preparados para isso.
+
+O Vite encaminha chamadas iniciadas por `/backend` ao destino configurado em `VITE_API_PROXY_TARGET`, removendo o prefixo `/backend`. Se a API estiver em outra porta ou endereço, ajuste a variável.
+
+Em produção, configure `VITE_API_URL` para a URL apropriada da API ou para um proxy reverso. A API precisa permitir a origem do front-end por CORS quando estiver hospedada separadamente.
+
+## Executar localmente
+
+Na pasta raiz do front-end:
 
 ```bash
-npm run build            # type-check + build em dist/
-npm run preview          # serve o build localmente
-npm run lint             # verifica o código (lint:fix corrige o que der)
+npm run dev
 ```
 
-Em produção, defina `VITE_API_URL` com a URL real da API (que precisará liberar CORS) ou sirva as duas atrás de um proxy reverso.
+O Vite normalmente disponibiliza a aplicação em `http://localhost:5173`.
 
-## 6. Estrutura de pastas
+Para testar operações reais, inicie também o back-end e o banco de dados conforme as instruções do repositório da API.
+
+## Verificações
+
+```bash
+npm run typecheck
+npm run lint
+npm run build
+```
+
+Para visualizar localmente o build de produção:
+
+```bash
+npm run preview
+```
+
+## Estrutura principal
 
 ```text
-contae-web/
-├── public/                  arquivos estáticos (favicon)
-├── src/
-│   ├── assets/              imagens e ilustrações importadas pelo código
-│   ├── components/
-│   │   ├── common/          componentes reutilizáveis (Button, Input, Card, CardResumo, Icone, Logo, PageHeader, EmConstrucao)
-│   │   └── layout/          estrutura das telas (AppLayout, Sidebar, AuthLayout)
-│   ├── pages/               UMA PASTA POR TELA (Login, Cadastro, Inicio, Movimentacoes, ...)
-│   ├── routes/              caminhos.ts (endereços), router.tsx (rotas), RotaProtegida.tsx
-│   ├── services/            toda comunicação com a API (cliente http + um serviço por recurso)
-│   ├── hooks/               hooks reutilizáveis (useAuth, useTituloPagina)
-│   ├── contexts/            estado global (sessão/autenticação)
-│   ├── types/               tipos que espelham os DTOs da API
-│   ├── utils/               funções puras (formatarMoeda, formatarData)
-│   ├── styles/              variaveis.css (tokens de design) e base.css (reset/tipografia)
-│   ├── config/              env.ts (único ponto que lê variáveis de ambiente)
-│   ├── App.tsx              provedores + roteador
-│   └── main.tsx             ponto de entrada
-├── .env.example
-├── eslint.config.js
-├── tsconfig.json
-└── vite.config.ts           alias "@" -> src e proxy da API
+src/
+├── components/       componentes reutilizáveis e layouts
+├── config/           leitura centralizada das variáveis de ambiente
+├── contexts/         contexto de autenticação
+├── hooks/            hooks reutilizáveis
+├── pages/            páginas do sistema, incluindo Movimentações
+├── routes/           caminhos e configuração das rotas
+├── services/         comunicação HTTP e serviços por recurso
+├── styles/           tokens de design, estilos globais e Tailwind
+├── types/            tipos de dados e contratos da API
+└── utils/            funções auxiliares
 ```
 
-## 7. O que já está pronto e o que falta
+A tela de Movimentações existente utiliza os serviços e os tipos do projeto, e oferece listagem, filtros, totais, paginação e operações de cadastro, edição e exclusão conforme os endpoints configurados no serviço.
 
-| Pronto | A implementar (por tela) |
-| --- | --- |
-| Vite + React + TS + ESLint, scripts | Conteúdo de **todas** as telas (os esqueletos listam o que falta no comentário do topo de cada arquivo) |
-| Rotas de todas as telas + 404 | Validação de formulários e chamadas aos serviços |
-| Layouts: sidebar responsiva (completa / só ícones / gaveta) e painel dividido de login | Gráfico do dashboard, tabelas, paginação, filtros |
-| Tokens de design e estilos globais | Cartão do usuário na sidebar e menu do avatar |
-| Cliente HTTP com token JWT, tratamento de erros e 401 | Fluxo real de login (guardar token com `useAuth().entrar`) |
-| Serviços e tipos de todos os endpoints existentes na API | Ícone de olho (mostrar senha) e seletor de cor, quando necessários |
+## Tailwind CSS
 
-## 8. Como trabalhar
+As configurações estão em `tailwind.config.js` e `postcss.config.js`. As diretivas do Tailwind ficam em `src/styles/base.css`, importado pelo ponto de entrada da aplicação. Os tokens de marca e tipografia continuam centralizados em `src/styles/variaveis.css`.
 
-### Criar uma nova página e registrar a rota
+## GitHub e segurança
 
-1. Crie `src/pages/Metas/Metas.tsx`:
-
-```tsx
-import { PageHeader } from '@/components/common'
-import { useTituloPagina } from '@/hooks/useTituloPagina'
-
-export function Metas() {
-  useTituloPagina('Metas')
-  return <PageHeader titulo="Metas" />
-}
-```
-
-2. Em `src/routes/caminhos.ts`, adicione `metas: '/metas'`.
-3. Em `src/routes/router.tsx`, dentro do grupo das telas internas, adicione `{ path: CAMINHOS.metas, element: <Metas /> }` (e o `import`).
-4. Para aparecer no menu, adicione uma linha em `ITENS_MENU` no `Sidebar.tsx`.
-
-### Criar um componente
-
-- **Reutilizável por várias telas** → `src/components/common/NomeDoComponente/` com `NomeDoComponente.tsx` e `NomeDoComponente.module.css`, exportado em `components/common/index.ts`. Veja `Button` e `CardResumo` como modelo.
-- **Usado só por uma tela** → dentro da pasta da página, em `pages/<Tela>/components/`. Se outra tela passar a usá-lo, mova para `common`.
-
-### Integrar com a API
-
-- Use sempre os serviços: `import { contaService } from '@/services'`. **Componentes não chamam `fetch` diretamente.**
-- Novo endpoint? Adicione a função no serviço do recurso e o tipo em `src/types/`.
-- Erros chegam como `ErroApi` (com `status` e a `message` devolvida pela API):
-
-```tsx
-try {
-  await contaService.salvar({ nome, tipo: 'CORRENTE', saldo: 0 })
-} catch (erro) {
-  if (erro instanceof ErroApi) setMensagem(erro.message)
-}
-```
-
-- Regras de cálculo (totais, saldo por categoria) ficam em `utils/`, não dentro do JSX.
-
-### Login
-
-Enquanto a tela de login não existe, `VITE_EXIGIR_LOGIN=false` deixa navegar nas telas internas. Quem implementar o login deve usar `authService.login`, `useAuth().entrar(token)` e então mudar a variável para `true`.
-
-## 9. Padrões de código
-
-- **Idioma:** nomes, comentários e textos da interface em português.
-- **Arquivos e componentes:** `PascalCase` para componentes (`CardResumo.tsx`) e seus CSS (`CardResumo.module.css`); `camelCase` para funções, hooks (`useAlgo`), serviços (`contaService.ts`) e variáveis.
-- **Um componente por arquivo**, com responsabilidade única. Se passar de ~150 linhas, divida.
-- **Estilos:** CSS Modules por componente; cores e medidas sempre via variáveis de `styles/variaveis.css`.
-- **Rotas:** nunca escreva caminhos soltos; use `CAMINHOS`.
-- **Imports:** use o alias `@/` (ex.: `@/components/common`).
-- **Tipos:** sem `any`; contratos da API ficam em `src/types`.
-- **Acessibilidade:** `label` em todo input (o `Input` já faz isso), `aria-label` em botões só com ícone, nunca usar só a cor para indicar Receita/Despesa (mantenha o texto e o sinal `-`).
-- **Comentários:** explique o *propósito* de cada bloco, como nos arquivos existentes.
-- **Antes de abrir PR:** `npm run lint` e `npm run build` sem erros.
-
-## 10. Lacunas entre o design e a API (alinhar com o time da API)
-
-| Design | API atual |
-| --- | --- |
-| Categoria com **tipo** (Receita/Despesa) e **cor** | `CategoriaResponseDTO` tem só `id`, `nome`, `usuarioId` |
-| Tipo de conta **Cartão** | `TipoConta`: `CORRENTE`, `POUPANCA`, `CARTEIRA` |
-| Editar conta e categoria | Só existem listar, buscar, criar e excluir |
-| Dashboard e relatório com totais | Sem endpoints agregados: calcular no frontend |
-| Filtros combinados (período, tipo, recorrentes, busca) | Filtros por rota, um de cada vez (data, categoria ou conta) |
-| Perfil e saudação com o nome do usuário logado | O token só carrega o e-mail e não existe `GET /me` |
-| "Meta do mês" no dashboard | Sem endpoint nem entidade |
-| "Esqueceu a senha?" | Sem endpoint |
+O repositório deve conter o código-fonte, `package.json`, a documentação e o modelo `.env.example`. Não versionar `node_modules`, `dist`, arquivos `.env` locais ou credenciais. O `.gitignore` está configurado para ignorar arquivos de ambiente, exceto `.env.example`.
