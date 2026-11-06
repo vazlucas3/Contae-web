@@ -1,0 +1,67 @@
+.cartao {
+max-width: 560px;
+}
+
+.mensagem {
+color: var(--texto-suave);
+text-align: center;
+}
+
+/* Avatar redondo com as iniciais + nome e e-mail */
+.identidade {
+display: flex;
+align-items: center;
+gap: var(--espaco-3);
+margin-bottom: var(--espaco-4);
+padding-bottom: var(--espaco-4);
+border-bottom: 1px solid var(--borda);
+}
+
+.avatar {
+display: grid;
+place-items: center;
+width: 64px;
+height: 64px;
+flex-shrink: 0;
+border-radius: 50%;
+background: linear-gradient(135deg, var(--verde-escuro) 0%, var(--verde-primario) 100%);
+color: #fff;
+font-family: var(--fonte-titulo);
+font-size: 22px;
+font-weight: 700;
+}
+
+.nome {
+font-size: 18px;
+font-weight: 700;
+}
+
+.email {
+color: var(--texto-suave);
+}
+
+.formulario {
+display: flex;
+flex-direction: column;
+gap: var(--espaco-3);
+}
+
+.dica {
+margin-top: calc(var(--espaco-2) * -1);
+color: var(--texto-suave);
+font-size: 13px;
+}
+
+.mostrarSenha {
+display: flex;
+align-items: center;
+gap: var(--espaco-2);
+color: var(--texto-suave);
+font-size: 13px;
+cursor: pointer;
+}
+
+.botoes {
+display: flex;
+justify-content: flex-end;
+}
