@@ -26,7 +26,7 @@ else if (campos.nome.length > LIMITE_NOME) erros.nome = `O nome deve ter no máx
 if (campos.email === '') erros.email = 'O e-mail é obrigatório.'
 else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(campos.email)) erros.email = 'Informe um e-mail válido.'
 
-if (campos.senha === '') erros.senha = 'Informe a senha para salvar.'
+if (campos.senha === '') erros.senha = 'Informe a nova senha para salvar.'
 else if (campos.senha.length < MINIMO_SENHA) erros.senha = `A senha deve ter no mínimo ${MINIMO_SENHA} caracteres.`
 
 return erros

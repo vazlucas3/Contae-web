@@ -86,7 +86,7 @@ export function Perfil() {
           />
 
           <Input
-            rotulo="Senha"
+            rotulo="Nova Senha"
             type={mostrarSenha ? 'text' : 'password'}
             placeholder={`Mínimo de ${MINIMO_SENHA} caracteres`}
             autoComplete="new-password"
@@ -94,7 +94,7 @@ export function Perfil() {
             onChange={(evento) => alterarCampo('senha', evento.target.value)}
             erro={erros.senha}
           />
-          <p className={estilos.dica}>Digite sua senha atual para mantê-la, ou uma nova para trocá-la.</p>
+          <p className={estilos.dica}>Obrigatória para salvar. Para não mudar a senha, repita a atual.</p>
 
           <label className={estilos.mostrarSenha}>
             <input type="checkbox" checked={mostrarSenha} onChange={(evento) => setMostrarSenha(evento.target.checked)} />
