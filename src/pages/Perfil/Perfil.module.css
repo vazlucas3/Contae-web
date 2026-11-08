@@ -1,5 +1,16 @@
+.grade {
+width: 100%;
+max-width: 1080px;
+display: grid;
+grid-template-columns: minmax(0, 1fr) 300px;
+gap: var(--espaco-5);
+align-items: start;
+}
+
 .cartao {
-max-width: 560px;
+width: 100%;
+min-width: 0;
+padding: var(--espaco-5);
 }
 
 .mensagem {
@@ -11,9 +22,15 @@ text-align: center;
 display: flex;
 align-items: center;
 gap: var(--espaco-3);
-margin-bottom: var(--espaco-4);
-padding-bottom: var(--espaco-4);
-border-bottom: 1px solid var(--borda);
+min-width: 0;
+}
+
+.cabecalhoPerfil {
+display: flex;
+align-items: flex-start;
+justify-content: space-between;
+gap: var(--espaco-3);
+min-width: 0;
 }
 
 .avatar {
@@ -31,12 +48,79 @@ font-weight: 700;
 }
 
 .nome {
+max-width: 280px;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
 font-size: 18px;
 font-weight: 700;
 }
 
 .email {
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
 color: var(--texto-suave);
+}
+
+.status {
+display: inline-flex;
+align-items: center;
+gap: var(--espaco-1);
+border-radius: 999px;
+padding: 6px 10px;
+font-size: 12px;
+font-weight: 700;
+white-space: nowrap;
+}
+
+.status span {
+width: 7px;
+height: 7px;
+border-radius: 50%;
+background: currentColor;
+}
+
+.ativo {
+color: var(--verde-primario);
+background: #e8f8f0;
+}
+
+.inativo {
+color: var(--vermelho);
+background: #fdecec;
+}
+
+.resumo {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: var(--espaco-3);
+margin-top: var(--espaco-4);
+padding: var(--espaco-3);
+border-radius: var(--raio-campo);
+border: 1px solid var(--borda);
+background: linear-gradient(135deg, var(--fundo), var(--superficie));
+}
+
+.resumo div {
+display: flex;
+flex-direction: column;
+gap: 4px;
+}
+
+.rotuloResumo {
+color: var(--texto-suave);
+font-size: 12px;
+}
+
+.resumo strong {
+font-size: 13px;
+}
+
+.divisor {
+height: 1px;
+margin: var(--espaco-4) 0;
+background: var(--borda);
 }
 
 .formulario {
@@ -45,10 +129,53 @@ flex-direction: column;
 gap: var(--espaco-3);
 }
 
+.tituloSecao {
+display: flex;
+flex-direction: column;
+gap: 2px;
+margin-top: var(--espaco-2);
+padding-bottom: var(--espaco-1);
+}
+
+.tituloSecao h2 {
+font-family: var(--fonte-titulo);
+font-size: 16px;
+}
+
+.tituloSecao p,
 .dica {
-margin-top: calc(var(--espaco-2) * -1);
 color: var(--texto-suave);
 font-size: 13px;
+}
+
+.dica {
+margin-top: calc(var(--espaco-2) * -1);
+}
+
+.forcaSenha {
+display: flex;
+align-items: center;
+gap: var(--espaco-2);
+margin-top: calc(var(--espaco-2) * -1);
+color: var(--texto-suave);
+font-size: 12px;
+}
+
+.barras {
+display: flex;
+gap: 3px;
+width: 80px;
+}
+
+.barras span {
+height: 4px;
+flex: 1;
+border-radius: 999px;
+background: var(--borda);
+}
+
+.barras .barraAtiva {
+background: var(--verde-primario);
 }
 
 .mostrarSenha {
@@ -63,4 +190,118 @@ cursor: pointer;
 .botoes {
 display: flex;
 justify-content: flex-end;
+margin-top: var(--espaco-2);
+}
+
+.lateral {
+min-width: 0;
+display: flex;
+flex-direction: column;
+gap: var(--espaco-3);
+}
+
+.destaque,
+.ajuda {
+padding: var(--espaco-4);
+border-radius: var(--raio-card);
+}
+
+.destaque {
+color: #fff;
+min-height: 190px;
+background: linear-gradient(145deg, var(--verde-escuro), var(--verde-primario));
+box-shadow: var(--sombra-suave);
+}
+
+.iconeDestaque {
+display: grid;
+place-items: center;
+width: 32px;
+height: 32px;
+margin-bottom: var(--espaco-3);
+border-radius: 50%;
+color: var(--verde-escuro);
+background: var(--verde-menta);
+font-weight: 800;
+}
+
+.destaque h2 {
+font-family: var(--fonte-titulo);
+font-size: 17px;
+color: #fff;
+}
+
+.destaque p,
+.ajuda p {
+margin-top: var(--espaco-2);
+font-size: 13px;
+line-height: 1.6;
+}
+
+.ajuda {
+border: 1px solid var(--borda);
+background: var(--superficie);
+}
+
+.ajuda span {
+font-family: var(--fonte-titulo);
+font-size: 14px;
+font-weight: 700;
+color: var(--texto);
+}
+
+.ajuda p {
+color: var(--texto-suave);
+}
+
+@media (max-width: 900px) {
+.grade {
+grid-template-columns: 1fr;
+}
+
+.cartao {
+max-width: 720px;
+padding: var(--espaco-4);
+}
+
+.lateral {
+display: grid;
+grid-template-columns: 1fr 1fr;
+max-width: 720px;
+}
+}
+
+@media (max-width: 520px) {
+.grade {
+gap: var(--espaco-3);
+}
+
+.cabecalhoPerfil {
+flex-direction: column;
+}
+
+.lateral {
+grid-template-columns: 1fr;
+}
+
+.resumo {
+grid-template-columns: 1fr;
+}
+
+.avatar {
+width: 56px;
+height: 56px;
+}
+
+.nome {
+font-size: 16px;
+}
+
+.email {
+max-width: 190px;
+}
+
+.cartao {
+padding: var(--espaco-3);
+}
 }
