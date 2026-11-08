@@ -1,10 +1,5 @@
 import type { ReactNode, SVGProps } from 'react'
 
-/* ------------------------------------------------------------------
- * Icone — ícones em estilo linha (traço fino), no padrão do Lucide.
- * Para adicionar um ícone: inclua o nome em "NomeIcone" e o desenho em "desenhos".
- * Ícones decorativos ficam ocultos para leitores de tela (aria-hidden).
- * ------------------------------------------------------------------ */
 export type NomeIcone =
   | 'inicio'
   | 'movimentacoes'

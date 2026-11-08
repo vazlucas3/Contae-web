@@ -15,16 +15,9 @@ import { NaoEncontrada } from '@/pages/NaoEncontrada/NaoEncontrada'
 import { CAMINHOS } from './caminhos'
 import { RotaProtegida } from './RotaProtegida'
 
-/* ------------------------------------------------------------------
- * ROTEADOR DA APLICAÇÃO (configuração centralizada)
- *
- * Para adicionar uma tela:
- *  1. crie a página em src/pages/<NomeDaPagina>/;
- *  2. adicione o caminho em ./caminhos.ts;
- *  3. registre uma linha abaixo, no grupo certo.
- * ------------------------------------------------------------------ */
+
 export const router = createBrowserRouter([
-  // Grupo 1 — telas públicas (login e cadastro), com layout dividido em dois painéis
+ 
   {
     element: <AuthLayout />,
     children: [
@@ -33,7 +26,7 @@ export const router = createBrowserRouter([
     ],
   },
 
-  // Grupo 2 — telas internas, com sidebar (exigem login quando VITE_EXIGIR_LOGIN=true)
+  
   {
     element: <RotaProtegida />,
     children: [
@@ -53,6 +46,6 @@ export const router = createBrowserRouter([
     ],
   },
 
-  // Página não encontrada (404)
+
   { path: '*', element: <NaoEncontrada /> },
 ])

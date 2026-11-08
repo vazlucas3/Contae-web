@@ -15,14 +15,12 @@ interface Props {
 export function FiltrosMovimentacoes({
   filtros, contas, categorias, temFiltros, datasInvalidas, onChange, onLimpar,
 }: Props) {
-  // Ao trocar o tipo, a categoria escolhida sai se for de outro tipo
   const mudarTipo = (tipo: '' | TipoMovimentacao) => {
     const categoriaAtual = categorias.find((c) => String(c.id) === filtros.categoriaId)
     const categoriaIncompativel = tipo && categoriaAtual?.tipo && categoriaAtual.tipo !== tipo
     onChange({ tipo, categoriaId: categoriaIncompativel ? '' : filtros.categoriaId })
   }
 
-  // A API atual não informa o tipo da categoria; quando não existir, exiba-a em qualquer filtro de tipo.
 
   return (
     <section aria-labelledby="titulo-filtros" className={estilos.card}>

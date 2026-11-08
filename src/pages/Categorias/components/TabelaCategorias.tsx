@@ -4,7 +4,6 @@ import estilos from './TabelaCategorias.module.css'
 
 interface TabelaCategoriasProps {
 categorias: CategoriaResponse[]
-/** Chamado quando o usuário pede para excluir (a confirmação é feita na página). */
 aoExcluir: (categoria: CategoriaResponse) => void
 }
 

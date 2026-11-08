@@ -1,4 +1,4 @@
-/* src/pages/Cadastro/Cadastro.module.css */
+
 .cabecalho {
 display: flex;
 align-items: center;
@@ -6,7 +6,7 @@ gap: var(--espaco-3);
 margin-bottom: var(--espaco-4);
 }
 
-/* Seta de voltar: botão quadrado com borda */
+
 .voltar {
 display: grid;
 place-items: center;

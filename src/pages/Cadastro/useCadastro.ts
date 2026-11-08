@@ -1,15 +1,10 @@
-// src/pages/Cadastro/useCadastro.ts
+
 import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CAMINHOS } from '@/routes/caminhos'
 import { ErroApi, usuarioService } from '@/services'
 
-/* ------------------------------------------------------------------
-* useCadastro — regras do formulário de cadastro (fora do JSX).
-*  - guarda os valores dos campos;
-*  - valida (mesmas regras da API: nome até 150, e-mail válido, senha com mínimo de 6);
-*  - cadastra na API e leva a pessoa para o login.
-* ------------------------------------------------------------------ */
+
 export const LIMITE_NOME = 150
 export const MINIMO_SENHA = 6
 
@@ -24,7 +19,6 @@ type Erros = Partial<Record<keyof Campos, string>>
 
 const CAMPOS_VAZIOS: Campos = { nome: '', email: '', senha: '', confirmarSenha: '' }
 
-/* Confere os campos e devolve um objeto só com os erros encontrados (vazio = tudo certo). */
 function validar(campos: Campos): Erros {
 const erros: Erros = {}
 
@@ -51,13 +45,11 @@ const [erros, setErros] = useState<Erros>({})
 const [erroApi, setErroApi] = useState<string | null>(null)
 const [salvando, setSalvando] = useState(false)
 
-/* Atualiza um campo e limpa o erro dele enquanto a pessoa digita. */
 function alterarCampo(campo: keyof Campos, valor: string) {
 setCampos((atuais) => ({ ...atuais, [campo]: valor }))
 if (erros[campo]) setErros((atuais) => ({ ...atuais, [campo]: undefined }))
 }
 
-/* Valida e envia o formulário. */
 async function cadastrar(evento: FormEvent<HTMLFormElement>) {
 evento.preventDefault()
 
@@ -71,7 +63,7 @@ setErroApi(null)
 
 try {
     await usuarioService.cadastrar({ nome: limpos.nome, email: limpos.email, senha: limpos.senha })
-    // Vai para o login levando uma mensagem de sucesso (a tela de Login pode exibi-la).
+    
     navegar(CAMINHOS.login, { state: { mensagem: 'Conta criada com sucesso. Faça login para continuar.' } })
 } catch (e) {
     setErroApi(e instanceof ErroApi ? e.message : 'Não foi possível criar a conta.')

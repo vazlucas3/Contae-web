@@ -12,7 +12,6 @@
   height: 44px;
   flex-shrink: 0;
   border-radius: 12px;
-  /* fundo = a própria cor do ícone, bem clara */
   background: color-mix(in srgb, currentColor 12%, transparent);
 }
 
