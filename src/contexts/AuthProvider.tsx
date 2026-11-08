@@ -1,20 +1,15 @@
 
-import { useEffect, useState, type ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { AuthContext } from './AuthContext'
-import type { LoginRequestDTO, LoginResponseDTO } from '@/services/authService'
+import type { LoginRequest, LoginResponse } from '@/types'
 import { authService } from '@/services/authService'
 import { armazenamentoToken } from '@/services/armazenamentoToken'
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [token, setToken] = useState<string | null>(null)
-  const [usuario, setUsuario] = useState<LoginResponseDTO | null>(null)
+  const [token, setToken] = useState<string | null>(() => armazenamentoToken.obter())
+  const [usuario, setUsuario] = useState<LoginResponse | null>(null)
 
-  useEffect(() => {
-    const tokenSalvo = armazenamentoToken.obter()
-    setToken(tokenSalvo)
-  }, [])
-
-  const entrar = async (dados: LoginRequestDTO) => {
+  const entrar = async (dados: LoginRequest) => {
     const resposta = await authService.login(dados)
 
     armazenamentoToken.salvar(resposta.token)

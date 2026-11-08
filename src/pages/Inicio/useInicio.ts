@@ -27,7 +27,7 @@ Promise.all([
     usuarioService.listarTodos(),
     contaService.listar(),
     categoriaService.listar(),
-    movimentacaoService.buscarTodas(),
+    movimentacaoService.listar(),
 ])
     .then(([usuarios, listaContas, listaCategorias, listaMovimentacoes]) => {
     if (cancelado) return

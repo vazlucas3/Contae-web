@@ -10,7 +10,7 @@ import { useTituloPagina } from '@/hooks/useTituloPagina'
  *  - 3 cards (total de receitas, de despesas e saldo do período);
  *  - tabela Categoria · Receitas · Despesas · Saldo.
  * Atenção: a API não tem endpoint de relatório; os totais são calculados no
- * frontend a partir de movimentacaoService.buscarTodas() (coloque o cálculo
+ * frontend a partir de movimentacaoService.listar() (coloque o cálculo
  * em "utils/", fora do componente visual).
  * ------------------------------------------------------------------ */
 export function Relatorio() {
