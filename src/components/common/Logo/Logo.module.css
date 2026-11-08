@@ -1,12 +1,20 @@
 .logo {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 9px;
+}
+
+.simbolo {
+  display: block;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.14));
 }
 
 .texto {
   font-family: var(--fonte-titulo);
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 800;
 }
 

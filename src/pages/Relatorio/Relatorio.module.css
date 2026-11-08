@@ -1,0 +1,83 @@
+.pagina { display: grid; gap: var(--espaco-4); padding-bottom: var(--espaco-5); }
+.filtros { display: flex; align-items: center; justify-content: space-between; gap: var(--espaco-4); padding: 18px 22px; }
+.filtroTitulo { display: flex; align-items: center; gap: 12px; color: var(--verde-primario); }
+.filtroTitulo div { display: grid; gap: 2px; color: var(--texto); }
+.filtroTitulo strong { font-family: var(--fonte-titulo); font-size: 14px; }
+.filtroTitulo span, .tituloCartao p { color: var(--texto-suave); font-size: 12px; }
+.controles { display: flex; align-items: center; gap: 12px; }
+.seletor { position: relative; display: flex; align-items: center; }
+.seletor select { appearance: none; height: 40px; min-width: 170px; padding: 0 36px 0 12px; border: 1px solid var(--borda); border-radius: var(--raio-campo); background: var(--superficie); color: var(--texto); font-weight: 600; }
+.seletor svg { position: absolute; right: 12px; pointer-events: none; color: var(--texto-suave); }
+.intervalo { color: var(--texto-suave); font-size: 12px; white-space: nowrap; }
+.datas { display: flex; gap: 8px; }
+.datas label { display: grid; gap: 2px; color: var(--texto-suave); font-size: 11px; }
+.datas input { height: 36px; border: 1px solid var(--borda); border-radius: 7px; padding: 0 8px; color: var(--texto); }
+.resumo { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--espaco-3); }
+.variacao, .variacaoNeutra { display: flex; align-items: center; gap: 5px; margin: 8px 0 0 6px; font-size: 11px; }
+.positivo { color: var(--verde-primario); }
+.negativo { color: var(--vermelho); }
+.variacaoNeutra { color: var(--texto-suave); }
+.graficos { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(250px, 1fr); gap: var(--espaco-3); }
+.cartaoGrafico, .cartaoResumo, .cartaoTabela { padding: 22px; }
+.tituloCartao { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
+.tituloCartao h2 { margin-bottom: 4px; font-size: 16px; }
+.legenda { display: flex; align-items: center; gap: 6px; color: var(--texto-suave); font-size: 11px; white-space: nowrap; }
+.pontoReceita, .pontoDespesa { width: 8px; height: 8px; margin-left: 8px; border-radius: 50%; background: var(--verde-primario); }
+.pontoDespesa { background: #f2994a; }
+.grafico { display: flex; height: 210px; align-items: stretch; gap: clamp(8px, 2vw, 24px); padding: 14px 8px 0; border-bottom: 1px solid var(--borda); }
+.colunaMes { display: flex; flex: 1; min-width: 24px; flex-direction: column; align-items: center; justify-content: flex-end; gap: 10px; }
+.barras { display: flex; width: min(100%, 48px); height: 170px; align-items: flex-end; justify-content: center; gap: 4px; }
+.barraReceita, .barraDespesa { width: 42%; min-height: 0; border-radius: 5px 5px 1px 1px; background: var(--verde-primario); transition: height .2s ease; }
+.barraDespesa { background: #f2994a; }
+.rotuloMes { color: var(--texto-suave); font-size: 11px; text-transform: capitalize; }
+.cartaoResumo { display: flex; flex-direction: column; }
+.cartaoResumo .tituloCartao { margin-bottom: 8px; }
+.destaqueSaldo { display: grid; gap: 5px; padding: 15px 0; border-bottom: 1px solid var(--borda); }
+.destaqueSaldo span, .linhaResumo span { color: var(--texto-suave); font-size: 12px; }
+.destaqueSaldo strong { font-family: var(--fonte-titulo); font-size: 25px; }
+.linhaResumo { display: flex; justify-content: space-between; gap: 8px; padding: 13px 0; border-bottom: 1px solid var(--borda); }
+.linhaResumo:last-child { border: 0; }
+.linhaResumo strong { font-size: 12px; }
+.textoReceita { color: var(--verde-primario) !important; }
+.textoDespesa { color: var(--vermelho) !important; }
+.cartaoTabela { min-width: 0; }
+.cartaoTabela .tituloCartao { margin-bottom: 12px; }
+.tabelaWrap { overflow-x: auto; }
+.tabelaWrap table { width: 100%; border-collapse: collapse; text-align: left; white-space: nowrap; }
+.tabelaWrap th { padding: 12px 14px; background: #f7f9f9; color: var(--texto-suave); font-size: 10px; font-weight: 600; letter-spacing: .045em; text-transform: uppercase; }
+.tabelaWrap th:first-child { border-radius: 8px 0 0 8px; }
+.tabelaWrap th:last-child { border-radius: 0 8px 8px 0; }
+.tabelaWrap td { padding: 13px 14px; border-bottom: 1px solid #eef1f1; color: var(--texto-suave); font-size: 12px; }
+.tabelaWrap tr:last-child td { border-bottom: 0; }
+.tabelaWrap td:last-child { text-align: right; font-weight: 600; }
+.categoriaNome { display: flex; min-width: 210px; align-items: center; gap: 9px; color: var(--texto); font-weight: 600; }
+.bolinhaCategoria { width: 9px; height: 9px; flex: 0 0 auto; border-radius: 50%; background: var(--verde-primario); }
+.progresso { width: 70px; height: 5px; margin-left: auto; overflow: hidden; border-radius: 4px; background: #edf1ef; }
+.progresso span { display: block; height: 100%; border-radius: inherit; background: var(--verde-primario); }
+.contagem { color: var(--texto-suave); font-size: 11px; }
+.descricao { color: var(--texto) !important; font-weight: 600; }
+.descricao small { display: block; margin-top: 2px; color: var(--texto-suave); font-size: 10px; font-weight: 400; }
+.etiqueta { display: inline-flex; padding: 4px 8px; border-radius: 20px; font-size: 10px; }
+.etiquetaReceita { background: #e9f7f0; color: var(--verde-primario); }
+.etiquetaDespesa { background: #fff0ef; color: var(--vermelho); }
+.vazio, .estado { padding: 34px 10px; color: var(--texto-suave); text-align: center; font-size: 13px; }
+
+@media (max-width: 900px) {
+  .graficos { grid-template-columns: 1fr; }
+  .resumo { grid-template-columns: 1fr 1fr; }
+  .resumo > div:last-child { grid-column: 1 / -1; }
+}
+@media (max-width: 640px) {
+  .filtros { align-items: stretch; flex-direction: column; padding: 16px; }
+  .controles { align-items: stretch; flex-direction: column; }
+  .seletor select { width: 100%; }
+  .intervalo { text-align: right; }
+  .datas { display: grid; grid-template-columns: 1fr 1fr; }
+  .datas input { width: 100%; }
+  .resumo { grid-template-columns: 1fr; }
+  .resumo > div:last-child { grid-column: auto; }
+  .cartaoGrafico, .cartaoResumo, .cartaoTabela { padding: 16px; }
+  .tituloCartao { flex-direction: column; }
+  .legenda { align-self: flex-start; }
+  .grafico { gap: 8px; }
+}

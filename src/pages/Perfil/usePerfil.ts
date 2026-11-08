@@ -16,6 +16,7 @@ senha: string
 
 type Erros = Partial<Record<keyof Campos, string>>
 
+/* Confere os campos e devolve só os erros encontrados (vazio = tudo certo). */
 function validar(campos: Campos): Erros {
 const erros: Erros = {}
 
@@ -38,7 +39,7 @@ const { sair } = useAuth()
 const [usuario, setUsuario] = useState<UsuarioResponse | null>(null)
 const [carregando, setCarregando] = useState(true)
 const [erroCarga, setErroCarga] = useState<string | null>(null)
-const [tentativa, setTentativa] = useState(0) 
+const [tentativa, setTentativa] = useState(0) // muda a cada "Tentar novamente"
 
 const [campos, setCampos] = useState<Campos>({ nome: '', email: '', senha: '' })
 const [erros, setErros] = useState<Erros>({})
@@ -46,6 +47,7 @@ const [erroApi, setErroApi] = useState<string | null>(null)
 const [sucesso, setSucesso] = useState<string | null>(null)
 const [salvando, setSalvando] = useState(false)
 
+/* Carrega o usuário logado ao abrir a tela e preenche o formulário. */
 useEffect(() => {
 let cancelado = false
 
@@ -79,12 +81,22 @@ setCarregando(true)
 setTentativa((n) => n + 1)
 }
 
+function restaurar() {
+if (!usuario) return
+setCampos({ nome: usuario.nome, email: usuario.email, senha: '' })
+setErros({})
+setErroApi(null)
+setSucesso(null)
+}
+
+/* Atualiza um campo e limpa o erro dele e a mensagem de sucesso enquanto a pessoa digita. */
 function alterarCampo(campo: keyof Campos, valor: string) {
 setCampos((atuais) => ({ ...atuais, [campo]: valor }))
 if (erros[campo]) setErros((atuais) => ({ ...atuais, [campo]: undefined }))
 setSucesso(null)
 }
 
+/* Valida e salva as alterações. */
 async function salvar(evento: FormEvent<HTMLFormElement>) {
 evento.preventDefault()
 if (!usuario) return
@@ -101,6 +113,7 @@ setSucesso(null)
 try {
     const atualizado = await usuarioService.atualizar(usuario.id, limpos)
 
+    // E-mail novo = token antigo inválido: sai e pede um novo login.
     if (atualizado.email !== usuario.email) {
     sair()
     navegar(CAMINHOS.login, {
@@ -119,5 +132,7 @@ try {
 }
 }
 
-return { usuario, carregando, erroCarga, tentarNovamente, campos, erros, erroApi, sucesso, salvando, alterarCampo, salvar }
+const temAlteracoes = Boolean(usuario && (campos.nome !== usuario.nome || campos.email !== usuario.email || campos.senha !== ''))
+
+return { usuario, carregando, erroCarga, tentarNovamente, campos, erros, erroApi, sucesso, salvando, temAlteracoes, alterarCampo, restaurar, salvar }
 }
