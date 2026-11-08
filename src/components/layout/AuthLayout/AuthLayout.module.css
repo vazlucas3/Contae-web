@@ -22,7 +22,6 @@
   line-height: 1.2;
 }
 
-/* Segunda linha do slogan do login em verde-menta */
 .slogan strong {
   display: block;
   color: var(--verde-menta);
@@ -40,7 +39,6 @@
   max-width: 400px;
 }
 
-/* Celular/tablet pequeno: painel verde vira um topo reduzido */
 @media (max-width: 767px) {
   .layout {
     grid-template-columns: 1fr;

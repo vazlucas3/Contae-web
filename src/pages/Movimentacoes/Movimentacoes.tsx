@@ -18,7 +18,6 @@ import { formatarData, formatarMoeda, formatarSaldo, mensagemDeErro } from '@/ty
 
 const ITENS_POR_PAGINA = 10
 
-// Espera o usuário parar de digitar antes de buscar no backend
 function useValorComAtraso<T>(valor: T, atrasoMs: number): T {
   const [atrasado, setAtrasado] = useState(valor)
   useEffect(() => {
@@ -49,9 +48,6 @@ export function Movimentacoes() {
   const temFiltros = (Object.keys(FILTROS_INICIAIS) as Array<keyof Filtros>)
     .some((chave) => filtros[chave] !== FILTROS_INICIAIS[chave])
 
-  /* ---------- Dados ---------- */
-
-  // Contas e categorias alimentam os filtros e o formulário
   useEffect(() => {
     Promise.all([contaService.listar(), categoriaService.listar()])
       .then(([listaContas, listaCategorias]) => {
@@ -61,7 +57,6 @@ export function Movimentacoes() {
       .catch((err) => setErro(mensagemDeErro(err, 'Não foi possível carregar contas e categorias.')))
   }, [])
 
-  // Filtros vão para o backend; respostas antigas são ignoradas se outra busca começou depois
   const carregarMovimentacoes = useCallback(async () => {
     if (datasInvalidas) return
     const id = ++ultimaRequisicao.current
@@ -94,14 +89,14 @@ export function Movimentacoes() {
     return () => { ativo = false }
   }, [carregarMovimentacoes])
 
-  // Aviso some sozinho
+
   useEffect(() => {
     if (!aviso) return
     const id = setTimeout(() => setAviso(null), 3500)
     return () => clearTimeout(id)
   }, [aviso])
 
-  /* ---------- Derivados ---------- */
+
 
   const ordenadas = useMemo(
     () => [...movimentacoes].sort((a, b) => b.data.localeCompare(a.data) || b.id - a.id),
@@ -123,7 +118,7 @@ export function Movimentacoes() {
   const inicio = (paginaAtual - 1) * ITENS_POR_PAGINA
   const itensDaPagina = ordenadas.slice(inicio, inicio + ITENS_POR_PAGINA)
 
-  /* ---------- Ações ---------- */
+ 
 
   const mudarFiltros = (parcial: Partial<Filtros>) => {
     setFiltros((atual) => ({ ...atual, ...parcial }))
@@ -151,7 +146,7 @@ export function Movimentacoes() {
     setEmEdicao(null)
   }, [])
 
-  // Erros aqui sobem para o modal, que mostra a mensagem dentro dele
+
   const salvar = async (dados: DadosMovimentacao) => {
     if (emEdicao) {
       await movimentacaoService.atualizar(emEdicao.id, dados)
@@ -179,11 +174,10 @@ export function Movimentacoes() {
     }
   }
 
-  /* ---------- Tela ---------- */
 
   return (
     <div className="mx-auto flex max-w-[1200px] flex-col gap-5 p-4 text-[#0B2E2A] sm:p-8">
-      {/* Cabeçalho: título à esquerda, ação principal à direita */}
+
       <header className="mb-1 flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold leading-tight tracking-tight">Movimentações</h1>
@@ -215,7 +209,6 @@ export function Movimentacoes() {
         onLimpar={limparFiltros}
       />
 
-      {/* Totais do resultado filtrado */}
       <section aria-label="Totais das movimentações filtradas" className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Total icone="sobe" rotulo="Receitas" valor={formatarMoeda(totais.receitas)}
           classeIcone="bg-[#E7F5EF] text-[#0E8A5F]" classeValor="text-[#0E8A5F]" />
@@ -251,7 +244,6 @@ export function Movimentacoes() {
         onSalvar={salvar}
       />
 
-      {/* Aviso de confirmação */}
       <div
         role="status"
         aria-live="polite"

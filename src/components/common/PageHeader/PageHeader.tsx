@@ -1,14 +1,9 @@
 import type { ReactNode } from 'react'
 import estilos from './PageHeader.module.css'
 
-/* ------------------------------------------------------------------
- * PageHeader — cabeçalho de página: título (e subtítulo) à esquerda,
- * ação primária à direita (ex.: <Button>+ Nova movimentação</Button>).
- * ------------------------------------------------------------------ */
 interface PageHeaderProps {
   titulo: string
   subtitulo?: string
-  /** Slot da ação primária (opcional). */
   acao?: ReactNode
 }
 

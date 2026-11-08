@@ -1,4 +1,4 @@
-// src/pages/Cadastro/Cadastro.tsx
+
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Aviso, Button, Input } from '@/components/common'
@@ -7,26 +7,18 @@ import { CAMINHOS } from '@/routes/caminhos'
 import { LIMITE_NOME, MINIMO_SENHA, useCadastro } from './useCadastro'
 import estilos from './Cadastro.module.css'
 
-/* ------------------------------------------------------------------
- * PÁGINA: Cadastro  (rota: /cadastro) — seção 4.2 do documento de design.
- *
- * Formulário com Nome, E-mail, Senha e Confirmar senha.
- * As regras (validação e envio para a API) ficam em useCadastro.ts.
- * Ao cadastrar com sucesso, vai para o Login.
- * ------------------------------------------------------------------ */
 export function Cadastro() {
   useTituloPagina('Cadastro')
 
   const navegar = useNavigate()
   const { campos, erros, erroApi, salvando, alterarCampo, cadastrar } = useCadastro()
 
-  // Alterna entre senha escondida (••••) e visível.
   const [mostrarSenha, setMostrarSenha] = useState(false)
   const tipoSenha = mostrarSenha ? 'text' : 'password'
 
   return (
     <>
-      {/* Cabeçalho: seta de voltar + título */}
+
       <header className={estilos.cabecalho}>
         <button
           type="button"

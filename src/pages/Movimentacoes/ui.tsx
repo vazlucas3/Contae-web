@@ -1,11 +1,11 @@
 import type { ReactNode, SelectHTMLAttributes } from 'react'
 
-/* Junta classes ignorando valores falsos */
+
 export function cx(...classes: Array<string | false | null | undefined>): string {
   return classes.filter(Boolean).join(' ')
 }
 
-/* Classes reutilizadas — cores do documento de contexto do Contae */
+
 const foco = 'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0E8A5F]'
 
 export const estilos = {
@@ -35,8 +35,6 @@ export const estilos = {
   tituloCard: 'text-base font-semibold text-[#0B2E2A]',
 }
 
-/* ---------- Ícones (traço fino, estilo Lucide) ----------
-   Se o projeto já usa lucide-react, dá para trocar por ele. */
 const caminhos = {
   mais: <><path d="M5 12h14" /><path d="M12 5v14" /></>,
   busca: <><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></>,
@@ -74,7 +72,6 @@ export function Icone({ nome, className = 'size-[18px]' }: { nome: NomeIcone; cl
   )
 }
 
-/* ---------- Campo: label + controle + mensagem de erro ---------- */
 interface CampoProps {
   id: string
   rotulo: string
@@ -93,7 +90,6 @@ export function Campo({ id, rotulo, erro, className, children }: CampoProps) {
   )
 }
 
-/* ---------- Select com seta no estilo do Contae ---------- */
 export function Select({ className, children, ...props }: SelectHTMLAttributes<HTMLSelectElement>) {
   return (
     <div className="relative">
@@ -108,11 +104,10 @@ export function Select({ className, children, ...props }: SelectHTMLAttributes<H
   )
 }
 
-/* ---------- Seletor segmentado (Todos / Receitas / Despesas) ---------- */
+
 export interface OpcaoSegmentada<T extends string> {
   valor: T
   rotulo: string
-  // classe da cor do texto quando selecionado
   classeAtiva?: string
 }
 

@@ -1,7 +1,6 @@
 import type { UsuarioRequest, UsuarioResponse } from '@/types'
 import { http } from './http'
 
-/* Usuários — /api/usuarios (o cadastro é público; o restante exige token). */
 export const usuarioService = {
   cadastrar: (dados: UsuarioRequest) => http.post<UsuarioResponse>('/api/usuarios', dados, false),
   listarTodos: () => http.get<UsuarioResponse[]>('/api/usuarios'),

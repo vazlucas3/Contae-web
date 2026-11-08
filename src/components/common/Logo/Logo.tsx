@@ -1,7 +1,5 @@
 import estilos from './Logo.module.css'
 
-/* Logo — quadrado verde arredondado com check + texto "Contae".
- * tema "escuro": texto branco (para fundos escuros) | "claro": texto escuro. */
 export function Logo({ tema = 'claro' }: { tema?: 'claro' | 'escuro' }) {
   return (
     <span className={`${estilos.logo} ${estilos[tema]}`}>

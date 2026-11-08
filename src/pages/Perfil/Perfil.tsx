@@ -16,7 +16,6 @@ export function Perfil() {
   const { usuario, carregando, erroCarga, tentarNovamente, campos, erros, erroApi, sucesso, salvando, alterarCampo, salvar } =
     usePerfil()
 
-  // Alterna entre senha escondida (••••) e visível.
   const [mostrarSenha, setMostrarSenha] = useState(false)
 
   if (carregando) {
@@ -55,7 +54,7 @@ export function Perfil() {
       {sucesso && <Aviso tipo="sucesso">{sucesso}</Aviso>}
 
       <Card className={estilos.cartao}>
-        {/* Avatar + dados atuais */}
+      
         <div className={estilos.identidade}>
           <div className={estilos.avatar} aria-hidden="true">
             {iniciais(usuario.nome)}
@@ -101,7 +100,6 @@ export function Perfil() {
             Mostrar senha
           </label>
 
-          {/* Erro vindo da API (ex.: e-mail já em uso ou servidor fora do ar) */}
           {erroApi && <Aviso tipo="erro">{erroApi}</Aviso>}
 
           <div className={estilos.botoes}>
