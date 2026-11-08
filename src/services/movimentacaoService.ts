@@ -1,37 +1,24 @@
 import { http } from './http'
-import type { 
-  MovimentacaoDto, 
-  CriarMovimentacaoRequest, 
+import type {
+  MovimentacaoResponse,
+  CriarMovimentacaoRequest,
   AtualizarMovimentacaoRequest,
-  FiltrosMovimentacao 
 } from '@/types'
 
 export const movimentacaoService = {
-  async listar(filtros?: FiltrosMovimentacao): Promise<MovimentacaoDto[]> {
-    const params = new URLSearchParams()
-    if (filtros) {
-      if (filtros.dataInicio) params.append('dataInicio', filtros.dataInicio)
-      if (filtros.dataFim) params.append('dataFim', filtros.dataFim)
-      if (filtros.categoriaId) params.append('categoriaId', String(filtros.categoriaId))
-      if (filtros.contaId) params.append('contaId', String(filtros.contaId))
-      if (filtros.tipo) params.append('tipo', filtros.tipo)
-      if (filtros.busca) params.append('busca', filtros.busca)
-    }
-
-    const query = params.toString()
-    const url = `/api/movimentacoes${query ? `?${query}` : ''}`
-    return http.get<MovimentacaoDto[]>(url)
+  async listar(): Promise<MovimentacaoResponse[]> {
+    return http.get<MovimentacaoResponse[]>('/movimentacoes')
   },
 
-  async criar(dados: CriarMovimentacaoRequest): Promise<MovimentacaoDto> {
-    return http.post<MovimentacaoDto>('/api/movimentacoes', dados)
+  async criar(dados: CriarMovimentacaoRequest): Promise<MovimentacaoResponse> {
+    return http.post<MovimentacaoResponse>('/movimentacoes', dados)
   },
 
-  async atualizar(id: number, dados: AtualizarMovimentacaoRequest): Promise<MovimentacaoDto> {
-    return http.put<MovimentacaoDto>(`/api/movimentacoes/${id}`, dados)
+  async atualizar(id: number, dados: AtualizarMovimentacaoRequest): Promise<MovimentacaoResponse> {
+    return http.put<MovimentacaoResponse>(`/movimentacoes/${id}`, dados)
   },
 
   async excluir(id: number): Promise<void> {
-    return http.delete<void>(`/api/movimentacoes/${id}`)
-  }
+    return http.delete<void>(`/movimentacoes/${id}`)
+  },
 }

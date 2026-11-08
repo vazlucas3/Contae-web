@@ -95,8 +95,8 @@ interface LinhaProps {
 
 function Linha({ item, categorias, onEditar, onExcluir }: LinhaProps) {
   const mov = item as MovimentacaoComIds
-  const receita = mov.tipo === 'RECEITA'
-  const categoria = categorias.find((c) => c.id === mov.categoriaId || c.nome === mov.categoriaNome)
+  const receita = mov.tipoMovimentacao === 'RECEITA'
+  const categoria = categorias.find((c) => c.id === mov.categoriaId || c.nome === mov.nomeCategoria)
 
   return (
     <tr className="transition-colors hover:bg-[#FAFCFC]">
@@ -108,10 +108,10 @@ function Linha({ item, categorias, onEditar, onExcluir }: LinhaProps) {
             className="size-2.5 shrink-0 rounded-full"
             style={{ backgroundColor: corDaCategoria(categoria?.cor) }}
           />
-          {mov.categoriaNome ?? categoria?.nome ?? '—'}
+          {mov.nomeCategoria ?? categoria?.nome ?? '—'}
         </span>
       </td>
-      <td className={td}>{mov.contaNome ?? '—'}</td>
+      <td className={td}>{mov.nomeConta ?? '—'}</td>
       <td className={td}>
         <span
           className={cx(
@@ -123,7 +123,7 @@ function Linha({ item, categorias, onEditar, onExcluir }: LinhaProps) {
         </span>
       </td>
       <td className={cx(td, 'text-right font-semibold tabular-nums', receita ? 'text-[#0E8A5F]' : 'text-[#E5383B]')}>
-        {formatarValor(mov.valor, mov.tipo)}
+        {formatarValor(mov.valor, mov.tipoMovimentacao)}
       </td>
       <td className={cx(td, 'w-px text-right')}>
         <div className="inline-flex gap-1">

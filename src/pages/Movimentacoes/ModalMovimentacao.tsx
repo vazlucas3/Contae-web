@@ -36,11 +36,11 @@ export function ModalMovimentacao({ aberto, movimentacao, contas, categorias, on
   useEffect(() => {
     if (!aberto) return
     const m = movimentacao as MovimentacaoComIds | null
-    const conta = m?.contaId ?? contas.find((c) => c.nome === m?.contaNome)?.id
-    const categoria = m?.categoriaId ?? categorias.find((c) => c.nome === m?.categoriaNome)?.id
+    const conta = m?.contaId ?? contas.find((c) => c.nome === m?.nomeConta)?.id
+    const categoria = m?.categoriaId ?? categorias.find((c) => c.nome === m?.nomeCategoria)?.id
 
     // eslint-disable-next-line react-hooks/set-state-in-effect -- sincroniza o formulário quando o modal abre ou muda de registro.
-    setTipo(m?.tipo ?? 'DESPESA')
+    setTipo(m?.tipoMovimentacao ?? 'DESPESA')
     setDescricao(m?.descricao ?? '')
     setValor(m ? formatarNumero(m.valor) : '')
     setData(m ? paraDataInput(m.data) : hojeISO())
@@ -114,7 +114,8 @@ export function ModalMovimentacao({ aberto, movimentacao, contas, categorias, on
       await onSalvar({
         descricao: texto,
         valor: Math.round(numero * 100) / 100,
-        tipo,
+        tipoMovimentacao: tipo,
+        recorrente: false,
         data,
         contaId: Number(contaId),
         categoriaId: Number(categoriaId),

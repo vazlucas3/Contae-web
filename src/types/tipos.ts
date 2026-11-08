@@ -18,18 +18,19 @@ export interface OpcaoCategoria {
 export type MovimentacaoComIds = MovimentacaoDto & {
   contaId?: number
   categoriaId?: number
-  contaNome?: string
-  categoriaNome?: string
+  nomeConta?: string
+  nomeCategoria?: string
 }
 
 // Corpo enviado para criar/atualizar (mesmo formato do seu código antigo)
 export interface DadosMovimentacao {
   descricao: string
   valor: number
-  tipo: TipoMovimentacao
+  tipoMovimentacao: TipoMovimentacao
   data: string
   contaId: number
   categoriaId: number
+  recorrente: boolean
 }
 
 export interface Filtros {

@@ -1,29 +1,35 @@
-export type TipoMovimentacao = 'RECEITA' | 'DESPESA';
+export type TipoMovimentacao = 'RECEITA' | 'DESPESA'
+export type TipoDespesa = 'FIXA' | 'VARIAVEL'
 
-export interface MovimentacaoDto {
+export interface MovimentacaoResponse {
   id: number;
+  contaId: number;
+  categoriaId: number;
   descricao: string;
   valor: number;
-  tipo: TipoMovimentacao;
-  data: string; // Formato YYYY-MM-DD ou ISO
-  categoriaId: number;
-  categoriaNome?: string;
-  contaId: number;
-  contaNome?: string;
-  recorrente?: boolean;
+  tipoMovimentacao: TipoMovimentacao;
+  tipoDespesa: TipoDespesa | null;
+  data: string;
+  recorrente: boolean;
+  nomeCategoria?: string;
+  nomeConta?: string;
+  saldoOriginalConta?: number;
+  saldoAtualConta?: number;
 }
 
 export interface CriarMovimentacaoRequest {
+  contaId: number;
+  categoriaId: number;
   descricao: string;
   valor: number;
-  tipo: TipoMovimentacao;
+  tipoMovimentacao: TipoMovimentacao;
+  tipoDespesa?: TipoDespesa | null;
   data: string;
-  categoriaId: number;
-  contaId: number;
-  recorrente?: boolean;
+  recorrente: boolean;
 }
 
 export type AtualizarMovimentacaoRequest = CriarMovimentacaoRequest
+export type MovimentacaoDto = MovimentacaoResponse
 
 export interface FiltrosMovimentacao {
   dataInicio?: string;
