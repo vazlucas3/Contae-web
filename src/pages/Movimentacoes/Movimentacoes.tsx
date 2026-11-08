@@ -63,15 +63,35 @@ export function Movimentacoes() {
     setCarregando(true)
     setErro(null)
     try {
-      const dados = await movimentacaoService.listar({
-        busca: busca.trim() || undefined,
-        tipo: filtros.tipo || undefined,
-        contaId: filtros.contaId ? Number(filtros.contaId) : undefined,
-        categoriaId: filtros.categoriaId ? Number(filtros.categoriaId) : undefined,
-        dataInicio: filtros.dataInicio || undefined,
-        dataFim: filtros.dataFim || undefined,
+      const dados = await movimentacaoService.listar()
+      const termo = busca.trim().toLocaleLowerCase()
+      const filtrados = dados.filter((movimentacao) => {
+        const correspondeBusca =
+          !termo ||
+          movimentacao.descricao.toLocaleLowerCase().includes(termo) ||
+          movimentacao.nomeCategoria?.toLocaleLowerCase().includes(termo) ||
+          movimentacao.nomeConta?.toLocaleLowerCase().includes(termo)
+        const correspondeTipo =
+          !filtros.tipo || movimentacao.tipoMovimentacao === filtros.tipo
+        const correspondeConta =
+          !filtros.contaId || movimentacao.contaId === Number(filtros.contaId)
+        const correspondeCategoria =
+          !filtros.categoriaId || movimentacao.categoriaId === Number(filtros.categoriaId)
+        const correspondeInicio =
+          !filtros.dataInicio || movimentacao.data >= filtros.dataInicio
+        const correspondeFim =
+          !filtros.dataFim || movimentacao.data <= filtros.dataFim
+
+        return (
+          correspondeBusca &&
+          correspondeTipo &&
+          correspondeConta &&
+          correspondeCategoria &&
+          correspondeInicio &&
+          correspondeFim
+        )
       })
-      if (id === ultimaRequisicao.current) setMovimentacoes(dados)
+      if (id === ultimaRequisicao.current) setMovimentacoes(filtrados)
     } catch (err) {
       if (id === ultimaRequisicao.current) {
         setErro(mensagemDeErro(err, 'Não foi possível carregar as movimentações.'))
@@ -107,7 +127,7 @@ export function Movimentacoes() {
     let receitas = 0
     let despesas = 0
     for (const m of movimentacoes) {
-      if (m.tipo === 'RECEITA') receitas += m.valor
+      if (m.tipoMovimentacao === 'RECEITA') receitas += m.valor
       else despesas += m.valor
     }
     return { receitas, despesas, saldo: receitas - despesas }
