@@ -4,10 +4,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { CAMINHOS } from '@/routes/caminhos'
 import estilos from './Sidebar.module.css'
 
-/* ------------------------------------------------------------------
- * ITENS DO MENU
- * Para incluir uma tela no menu, adicione uma linha aqui.
- * ------------------------------------------------------------------ */
+
 interface ItemMenu {
   rotulo: string
   caminho: string
@@ -24,13 +21,10 @@ const ITENS_MENU: ItemMenu[] = [
 ]
 
 interface SidebarProps {
-  /** Usado em telas pequenas, onde o menu vira uma gaveta. */
   aberta: boolean
   aoFechar: () => void
 }
 
-/* Sidebar — menu lateral fixo: logo no topo, navegação e "Sair" no rodapé.
- * O cartão do usuário (avatar, nome, e-mail) é responsabilidade da tela de Perfil. */
 export function Sidebar({ aberta, aoFechar }: SidebarProps) {
   const { sair } = useAuth()
   const navegar = useNavigate()

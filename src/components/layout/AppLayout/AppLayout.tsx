@@ -4,12 +4,6 @@ import { Icone } from '@/components/common'
 import { Sidebar } from '../Sidebar/Sidebar'
 import estilos from './AppLayout.module.css'
 
-/* ------------------------------------------------------------------
- * AppLayout — layout das telas internas.
- *  - menu lateral (Sidebar);
- *  - barra superior com botão hambúrguer, visível apenas em celular;
- *  - área de conteúdo, onde a página da rota atual é renderizada (<Outlet />).
- * ------------------------------------------------------------------ */
 export function AppLayout() {
   const [menuAberto, setMenuAberto] = useState(false)
 

@@ -1,11 +1,6 @@
 import { useId, type InputHTMLAttributes } from 'react'
 import estilos from './Input.module.css'
 
-/* ------------------------------------------------------------------
- * Input — campo de texto com <label> sempre associado (acessibilidade)
- * e área para mensagem de erro de validação.
- * Aceita todos os atributos nativos de <input> (type, placeholder, value...).
- * ------------------------------------------------------------------ */
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   rotulo: string
   erro?: string

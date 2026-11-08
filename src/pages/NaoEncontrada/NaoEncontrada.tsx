@@ -3,7 +3,6 @@ import { useTituloPagina } from '@/hooks/useTituloPagina'
 import { CAMINHOS } from '@/routes/caminhos'
 import estilos from './NaoEncontrada.module.css'
 
-/* PÁGINA: 404 — exibida para qualquer endereço sem rota registrada. */
 export function NaoEncontrada() {
   useTituloPagina('Página não encontrada')
 

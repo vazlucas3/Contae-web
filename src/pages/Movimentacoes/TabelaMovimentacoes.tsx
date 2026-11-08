@@ -151,7 +151,6 @@ function Linha({ item, categorias, onEditar, onExcluir }: LinhaProps) {
   )
 }
 
-/* ---------- Estados ---------- */
 function Carregando() {
   return (
     <div className="flex items-center justify-center gap-3 py-12 text-[#6B7C79]" role="status">
@@ -192,7 +191,6 @@ function EstadoVazio({ temFiltros, onLimparFiltros, onNova }: EstadoVazioProps) 
   )
 }
 
-/* ---------- Paginação ---------- */
 interface PaginacaoProps {
   pagina: number
   totalPaginas: number
@@ -202,7 +200,7 @@ interface PaginacaoProps {
   onPagina: (pagina: number) => void
 }
 
-// Mostra todas as páginas até 7; acima disso, 1 … atual-1 atual atual+1 … última
+
 function paginasVisiveis(atual: number, total: number): Array<number | '…'> {
   if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1)
   const lista: Array<number | '…'> = [1]
