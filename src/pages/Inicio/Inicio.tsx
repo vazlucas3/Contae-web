@@ -1,4 +1,4 @@
-// src/pages/Inicio/Inicio.tsx
+
 import { Aviso, Button, Card, CardResumo, Icone, PageHeader } from '@/components/common'
 import { useTituloPagina } from '@/hooks/useTituloPagina'
 import { formatarMoeda } from '@/utils/formatadores'
@@ -15,37 +15,21 @@ import {
 import { useInicio } from './useInicio'
 import estilos from './Inicio.module.css'
 
-/* ------------------------------------------------------------------
- * PÁGINA: Início  (rota: /)  — seção 4.3 do documento de design.
- *
- * A tela tem 5 partes, de cima para baixo:
- *  1. saudação com o nome da pessoa;
- *  2. cartão de destaque (saldo nas contas + resultado do mês);
- *  3. cards de receitas e despesas do mês;
- *  4. gráfico dos últimos dias;
- *  5. últimas movimentações.
- *
- * Onde mexer:
- *  - contas e regras      -> calcularResumo.ts
- *  - busca na API         -> useInicio.ts
- *  - cada bloco da tela   -> pasta components/
- *  - espaçamento da tela  -> Inicio.module.css
- * ------------------------------------------------------------------ */
 
-const QUANTIDADE_ULTIMAS = 5 // movimentações na lista
-const DIAS_DO_GRAFICO = 7 // dias no gráfico
+const QUANTIDADE_ULTIMAS = 5 
+const DIAS_DO_GRAFICO = 7 
 
 export function Inicio() {
   useTituloPagina('Início')
 
   const { nomeUsuario, contas, categorias, movimentacoes, carregando, erro, tentarNovamente } = useInicio()
 
-  // Contas do mês atual.
+  
   const doMes = doMesAtual(movimentacoes)
   const receitas = somarPorTipo(doMes, 'RECEITA')
   const despesas = somarPorTipo(doMes, 'DESPESA')
 
-  // Só o primeiro nome na saudação.
+
   const primeiroNome = nomeUsuario.split(' ')[0]
   const saudacao = primeiroNome ? `Olá, ${primeiroNome}!` : 'Olá!'
 

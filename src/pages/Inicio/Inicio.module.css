@@ -1,12 +1,9 @@
-/* src/pages/Inicio/Inicio.module.css */
 
-/* Os blocos da página ficam empilhados com o mesmo espaçamento */
 .pagina {
   display: grid;
   gap: var(--espaco-4);
 }
 
-/* Cards de receitas e despesas lado a lado; quebram de linha em telas estreitas */
 .resumo {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));

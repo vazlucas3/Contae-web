@@ -5,7 +5,6 @@ gap: var(--espaco-3);
 margin-bottom: var(--espaco-4);
 }
 
-/* Seta de voltar: botão quadrado com borda */
 .voltar {
 display: grid;
 place-items: center;
@@ -40,7 +39,6 @@ background: color-mix(in srgb, var(--vermelho) 8%, var(--superficie));
 color: var(--vermelho);
 }
 
-/* Cancelar e Salvar lado a lado, alinhados à direita */
 .botoes {
 display: flex;
 justify-content: flex-end;

@@ -1,12 +1,6 @@
 import type { ButtonHTMLAttributes } from 'react'
 import estilos from './Button.module.css'
 
-/* ------------------------------------------------------------------
- * Button — botão padrão do sistema.
- *  variante "primario"   : fundo verde, texto branco (ação principal)
- *  variante "secundario" : fundo branco com borda (Cancelar/Limpar)
- * Aceita todos os atributos nativos de <button>.
- * ------------------------------------------------------------------ */
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variante?: 'primario' | 'secundario'
   larguraTotal?: boolean

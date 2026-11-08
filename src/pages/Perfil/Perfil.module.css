@@ -7,7 +7,6 @@ color: var(--texto-suave);
 text-align: center;
 }
 
-/* Avatar redondo com as iniciais + nome e e-mail */
 .identidade {
 display: flex;
 align-items: center;

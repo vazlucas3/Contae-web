@@ -2,20 +2,9 @@ import { env } from '@/config/env'
 import type { RespostaErroApi } from '@/types'
 import { armazenamentoToken } from './armazenamentoToken'
 
-/* ------------------------------------------------------------------
- * CLIENTE HTTP
- * Pequeno wrapper sobre fetch. Responsabilidades:
- *  - montar a URL a partir de env.apiUrl;
- *  - enviar JSON e o cabeçalho "Authorization: Bearer <token>";
- *  - converter respostas de erro da API em ErroApi (com a mensagem da API);
- *  - avisar a aplicação quando o token for rejeitado (401).
- * Os componentes NÃO usam este arquivo diretamente: usam os serviços.
- * ------------------------------------------------------------------ */
 
-/** Evento disparado no window quando a API responde 401 com token enviado. */
 export const EVENTO_NAO_AUTORIZADO = 'contae:nao-autorizado'
 
-/** Erro lançado quando a API responde com status fora de 2xx. */
 export class ErroApi extends Error {
   readonly status: number
 
@@ -29,7 +18,7 @@ export class ErroApi extends Error {
 interface OpcoesRequisicao {
   metodo: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
   corpo?: unknown
-  /** Envia o token JWT quando existir. Use false em login/cadastro. */
+  
   autenticada?: boolean
 }
 
@@ -61,7 +50,7 @@ async function requisicao<T>(caminho: string, opcoes: OpcoesRequisicao): Promise
     throw new ErroApi(resposta.status, erro?.message ?? 'Erro inesperado ao falar com o servidor.')
   }
 
-  // 204 (sem conteúdo) ou corpo vazio
+
   const texto = await resposta.text()
   return (texto ? JSON.parse(texto) : undefined) as T
 }

@@ -1,4 +1,4 @@
-// Barrel dos componentes reutilizáveis: import { Button, Card } from '@/components/common'
+
 export { Button } from './Button/Button'
 export { Card } from './Card/Card'
 export { CardResumo } from './CardResumo/CardResumo'

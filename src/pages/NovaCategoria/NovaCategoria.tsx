@@ -3,13 +3,6 @@ import { useTituloPagina } from '@/hooks/useTituloPagina'
 import { LIMITE_NOME, useNovaCategoria } from './useNovaCategoria'
 import estilos from './NovaCategoria.module.css'
 
-/* ------------------------------------------------------------------
- * PÁGINA: Nova categoria  (rota: /categorias/nova) — seção 4.10 do documento de design.
- *
- * ETAPA 2 (pronta): formulário com o campo Nome, validação e salvar na API.
- * Próxima etapa:
- *  - ETAPA 3: campos Tipo (Receita/Despesa) e Cor (bolinhas) — dependem da API.
- * ------------------------------------------------------------------ */
 export function NovaCategoria() {
   useTituloPagina('Nova categoria')
 
@@ -17,7 +10,6 @@ export function NovaCategoria() {
 
   return (
     <>
-      {/* Cabeçalho: seta de voltar + título */}
       <header className={estilos.cabecalho}>
         <button type="button" className={estilos.voltar} onClick={cancelar} aria-label="Voltar para categorias">
           ←
@@ -37,7 +29,6 @@ export function NovaCategoria() {
             autoFocus
           />
 
-          {/* Erro vindo da API (ex.: servidor fora do ar) */}
           {erroApi && (
             <p className={estilos.erroApi} role="alert">
               {erroApi}

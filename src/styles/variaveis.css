@@ -1,8 +1,4 @@
-/* ==================================================================
- * TOKENS DE DESIGN
- * Valores aproximados extraídos do documento de contexto do frontend.
- * Use SEMPRE estas variáveis em vez de cores/medidas "soltas".
- * ================================================================== */
+
 :root {
   /* --- Cores da marca --- */
   --verde-escuro: #052e2a;

@@ -16,7 +16,6 @@ senha: string
 
 type Erros = Partial<Record<keyof Campos, string>>
 
-/* Confere os campos e devolve só os erros encontrados (vazio = tudo certo). */
 function validar(campos: Campos): Erros {
 const erros: Erros = {}
 
@@ -39,7 +38,7 @@ const { sair } = useAuth()
 const [usuario, setUsuario] = useState<UsuarioResponse | null>(null)
 const [carregando, setCarregando] = useState(true)
 const [erroCarga, setErroCarga] = useState<string | null>(null)
-const [tentativa, setTentativa] = useState(0) // muda a cada "Tentar novamente"
+const [tentativa, setTentativa] = useState(0) 
 
 const [campos, setCampos] = useState<Campos>({ nome: '', email: '', senha: '' })
 const [erros, setErros] = useState<Erros>({})
@@ -47,7 +46,6 @@ const [erroApi, setErroApi] = useState<string | null>(null)
 const [sucesso, setSucesso] = useState<string | null>(null)
 const [salvando, setSalvando] = useState(false)
 
-/* Carrega o usuário logado ao abrir a tela e preenche o formulário. */
 useEffect(() => {
 let cancelado = false
 
@@ -81,14 +79,12 @@ setCarregando(true)
 setTentativa((n) => n + 1)
 }
 
-/* Atualiza um campo e limpa o erro dele e a mensagem de sucesso enquanto a pessoa digita. */
 function alterarCampo(campo: keyof Campos, valor: string) {
 setCampos((atuais) => ({ ...atuais, [campo]: valor }))
 if (erros[campo]) setErros((atuais) => ({ ...atuais, [campo]: undefined }))
 setSucesso(null)
 }
 
-/* Valida e salva as alterações. */
 async function salvar(evento: FormEvent<HTMLFormElement>) {
 evento.preventDefault()
 if (!usuario) return
@@ -105,7 +101,6 @@ setSucesso(null)
 try {
     const atualizado = await usuarioService.atualizar(usuario.id, limpos)
 
-    // E-mail novo = token antigo inválido: sai e pede um novo login.
     if (atualizado.email !== usuario.email) {
     sair()
     navegar(CAMINHOS.login, {
