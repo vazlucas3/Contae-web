@@ -81,6 +81,14 @@ setCarregando(true)
 setTentativa((n) => n + 1)
 }
 
+function restaurar() {
+if (!usuario) return
+setCampos({ nome: usuario.nome, email: usuario.email, senha: '' })
+setErros({})
+setErroApi(null)
+setSucesso(null)
+}
+
 /* Atualiza um campo e limpa o erro dele e a mensagem de sucesso enquanto a pessoa digita. */
 function alterarCampo(campo: keyof Campos, valor: string) {
 setCampos((atuais) => ({ ...atuais, [campo]: valor }))
@@ -124,5 +132,7 @@ try {
 }
 }
 
-return { usuario, carregando, erroCarga, tentarNovamente, campos, erros, erroApi, sucesso, salvando, alterarCampo, salvar }
+const temAlteracoes = Boolean(usuario && (campos.nome !== usuario.nome || campos.email !== usuario.email || campos.senha !== ''))
+
+return { usuario, carregando, erroCarga, tentarNovamente, campos, erros, erroApi, sucesso, salvando, temAlteracoes, alterarCampo, restaurar, salvar }
 }
